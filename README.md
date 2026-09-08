@@ -2,7 +2,7 @@
 
 **Take-home demo for PalUp AI Agent Designer**
 
-A dual-agent (C 端 + B 端) AI system for Shopify Plus 美妝品牌 LUNA Botanica.
+A dual-agent (C 端 + B 端) AI system for Shopify Plus 美妝品牌 LUNA Beauty.
 - **Lily-C**：C 端買家 chat widget（客服 + 業務推廣 + 訂單/退貨/多語/handoff）
 - **Lily-B**：B 端內勤 conversational BI dashboard
 

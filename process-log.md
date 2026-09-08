@@ -94,7 +94,7 @@
 - Lily lock 保養美妝
 - Lily 補關鍵情報：**PalUp 核心 = Shopify Plus 商家**（不是一般 SMB）
 - Claude 據此調整品牌等級：中高階 DTC
-- Claude 提議虛構品牌 **LUNA Botanica**
+- Claude 提議虛構品牌 **LUNA Beauty**
 
 **產出**：memory 更新 Shopify Plus 定位、seed 品牌提案
 
@@ -105,7 +105,7 @@
 - Claude 分析純保養 / 純美妝 / 混合 三種資料量差異
 - 提議混合品牌以最大化 wow 度
 - Lily lock: 純美妝
-- 品牌 LUNA Botanica 定調為純美妝品牌
+- 品牌 LUNA Beauty 定調為純美妝品牌
 
 **產出**：SKU 組成表（10-12 base products，加色號共 ~30 variants）
 

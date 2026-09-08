@@ -1,4 +1,4 @@
-# LUNA Botanica × Lily — Product Vision
+# LUNA Beauty × Lily — Product Vision
 
 **Purpose**：完整產品願景 + 3-phase roadmap。面試講「demo 之外還想做什麼」時翻這份。
 **當前 demo 範圍請看** `spec.md`。
