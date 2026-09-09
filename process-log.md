@@ -206,4 +206,101 @@
 
 ---
 
-## Day 2+ 待填
+## Day 2 — 2026-09-08（同日續戰）
+
+### Phase 12: 帳號註冊 + 工具安裝（~30 min）
+
+**發生的事**：
+- Lily 申請 5 個免費帳號：GitHub / Google AI Studio / Vercel / Fly.io / Supabase
+- 從 AI Studio 拿 Gemini API key（新格式 `AQ.xxx`，非 `AIzaSy` 舊格式）
+- Claude 建 `backend/.env` + `.env.example` + 根目錄 `.gitignore`
+- 遇到 npm 舊 cache 權限問題，Lily 執行 `sudo chown -R $(id -u):$(id -g) ~/.npm` 一鍵修復
+- Superpowers：Lily 在 Claude Code 打 `/plugin install superpowers@claude-plugins-official` → reload → 14 skills 就位
+- Gstack：Claude 用 `git clone https://github.com/garrytan/gstack.git ~/.claude/skills/gstack` 裝
+- Agency-Agents 校正：從 flaviocopes/agency-agents（不存在）→ **msitarzewski/agency-agents**（231 personas，clone 到 `vendor/agency-agents`）
+
+**產出**：`.env`、`.gitignore`、Superpowers + Gstack + Agency-Agents 全部就位
+
+### Phase 13: 建骨架（~15 min）
+
+**發生的事**：
+- `git init` + `npx create-next-app@latest frontend --typescript --tailwind --app`（Next.js 15，含 Tailwind）
+- `npm install @assistant-ui/react recharts` 額外套件
+- `python3 -m venv venv` + `pip install fastapi uvicorn google-genai python-dotenv slowapi`
+- 寫 `backend/main.py`、`Dockerfile`、`requirements.txt`
+- 寫根目錄 `README.md`、`CLAUDE.md`
+- 首個 git commit：`chore: initial scaffold`
+- 意外把 `vendor/agency-agents` commit 為 git submodule → `git rm --cached` + gitignore vendor/ + amend commit
+
+**產出**：完整專案骨架，backend 可 import 成功
+
+### Phase 14: Agent Hello World（~30 min）
+
+**發生的事**：
+- 寫 backend `/chat` endpoint：讀 .env → 呼叫 Gemini 3.6 Flash
+- **踩坑 1**：backend 起不來 → 發現 `.env` 是 0 bytes（TextEdit 存空的）→ 直接 Write 補
+- **踩坑 2**：Gemini API 400 → 移除 `thinking_config` → OK
+- **踩坑 3**：Model 名稱 `gemini-2.0-flash` 過期（Claude knowledge cutoff 早於 2026）→ 改 `gemini-3.6-flash` → OK
+- 首個成功回覆：「你好！真巧我們擁有相同的名字呢。我是 LUNA Beauty 的 AI 助理 Lily...」（Tokens: 75 in / 35 out）
+- 寫 frontend `app/page.tsx`：chat widget UI 直接接 backend
+- 兩台 server 平行啟動，Lily 打開 `localhost:3000` 開始對話
+- **踩坑 4**：Dark mode 導致字看不到 → 改 `globals.css` 強制 light mode
+
+**產出**：真實可對話的 Lily-C（v0.1）；第一個 wow milestone 達成
+
+### Phase 15: Rebrand + 收 Day 2（~10 min）
+
+**發生的事**：
+- Lily 拋改名：LUNA Botanica → **LUNA Beauty**
+- Claude 確認 spec.md 垂類 = 美妝（Line 46 已寫）
+- 批次 sed 改名 8 個檔
+- Commit `feat: agent hello world + rebrand to LUNA Beauty + fix dark mode`
+
+**產出**：Day 2 完成，git 2 commits，Day 1+2 目標同一天達成
+
+### Day 2 觀察（Q3 反思）
+- **踩坑學習 Q7 素材**：Gemini SDK 版本差異、model 名稱衰退、TextEdit 存 .env 陷阱 —— 都是「多 agent 系統實務痛點」的第一手經驗
+- **npm 權限問題**是常見 macOS DevOps 摩擦，記在心裡
+- 一天壓兩天進度是 exception，不是 rule；Day 3-6 恢復每日 3-4 hr 節奏
+
+---
+
+## Day 3 — 2026-09-09
+
+### Phase 16: 3-Lens Spec Review（~40 min）
+
+**發生的事**：
+- Lily 開工前主動提問：「這幾個 skill 有需要 review 我們裝之前的規格嗎？」
+- Claude 建議三種深度（3 lens 全 review / 只跑 plan-eng-review / 跳過），Lily 選最深的
+- Claude 讀 3 個 skill/persona 定義：
+  - Gstack `plan-eng-review`（工程 review）
+  - Agency-Agents `product-manager`（PM 視角）
+  - Agency-Agents `code-reviewer` + Superpowers 眼（review 視角）
+- 對 spec.md + architecture.md 逐一 apply，產出 19 個 findings
+- 分 3 優先級：🔴 must-fix (6) / 🟡 should-fix (6) / 💭 nice (4) / 方向調整 (2)
+- Lily 全 accept，Claude 30 分鐘內改完 3 個檔
+
+**19 個 findings 摘要**：
+- 🔴 seed data schema / session ID / cross-agent DB / Q1-7 daily ritual / demo storyboard pacing / token auto-log
+- 🟡 多語策略 / handoff 通知 / pin auth / env checklist / 面試官 fallback / demo 成功指標
+- 💭 model 版本管理 / LLM 失敗 fallback / testing framework / roadmap rehearse
+- 方向調整：sub-agent stub 提前到 Day 3、OpenClaw 實驗提前到 Day 4
+
+**產出**：
+- spec.md 加「🔧 Day 3 Prep 修正」section + 更新 storyboard + refined 一週藍圖
+- architecture.md 加 seed data JSON schemas + Session model + Token middleware
+- metrics.md 加自動收集機制說明 + Gemini 定價
+- 5 個關鍵劇本 + 面試官 fallback 策略 spec 進 spec.md
+
+**觀察**（Q3 素材）：
+- **這是 Q4/Q5 面試金句素材**：實際用 Superpowers + Gstack + Agency-Agents 三 lens 對 spec 做結構化 review，比純講「有用到」有說服力
+- 3-lens 每個 lens 找到不同類型問題（工程 blockers vs. 產品盲點 vs. review 缺口），證明工具是互補的
+- Lily 主動提出 review 需求 = 她已內化 PM 紀律，不用我提
+
+### Phase 17: 進行中 — Day 3 執行（seed data / 商品推薦 / 多語）
+
+（下一步）
+
+---
+
+## Day 4+ 待填

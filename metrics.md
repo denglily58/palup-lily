@@ -21,6 +21,20 @@
 
 ---
 
+## 自動收集機制（Day 3 起）
+
+- FastAPI middleware：每次 `/chat` 完成後 insert 一筆到 Supabase `chat_logs` 表
+- 欄位：`timestamp / endpoint / session_id / input_tokens / output_tokens / latency_ms / model / cost_estimate`
+- Day 6 收尾用 SQL 一次拿全部聚合數字
+
+### Gemini 3.6 Flash 定價（2026-09 查）
+- 免費層：15 req/min、1500 req/day、1M tokens/min
+- 付費層（如超）：$0.075 / 1M input tokens、$0.30 / 1M output tokens
+
+**Demo 期間預估**：<$0 → 完全在免費層內
+
+---
+
 ## 逐日紀錄
 
 ### Day 1 — 2026-09-08

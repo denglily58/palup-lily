@@ -260,29 +260,100 @@
 
 ---
 
-## 一週作戰藍圖（scope 擴增後）
+## 一週作戰藍圖（3-lens review 後 refined）
 
 | Day | 階段 | 產出 | Q 素材 |
 |---|---|---|---|
-| Day 1（今天）| 需求收斂 + 選型 + mockup + 建骨架 | Spec + mockup + 5 個素材檔 + 空專案 | Q3 |
-| Day 2 | 安裝 Superpowers/Gstack/Agency-Agents + 帳號註冊 + Agent hello | Chat UI 開起來、agent 回 hi | Q4, Q5 |
-| Day 3 | 業務 agent + Shopify seed + **多語** + tracking tokens | 能對話推商品、中英切換 | Q5, Q7 |
-| Day 4 | 客服 agent + **訂單查詢 + 退貨啟動** + Lily-C/Lily-B dual | Lily 完整 C 端能力 | Q4, Q5, Q7 |
-| Day 5 | Agent Army 8 sub-agents + CI/CD → Fly.io + Vercel + **handoff → B 端 inbox** | 自動化部署 + 8 sub-agent md | Q6 |
-| Day 6 | OpenClaw/Hermes 小實驗 + Polish + 錄 demo + Q1-7 定稿 | 交件包 | Q1, Q2 |
-| Day 7 | Buffer / 交件 / 面試準備（buffer 已被 scope 擴增吃掉，實際只剩交件） | Done | - |
+| Day 1（09-08）| 需求收斂 + 選型 + mockup + 建骨架 | Spec + mockup + 5 個素材檔 + 空專案 | Q3 |
+| Day 2（09-08）| 安裝 Superpowers/Gstack/Agency-Agents + 帳號 + Agent hello | Chat UI 開起來、agent 回 hi | Q4, Q5 |
+| Day 3（09-09）| 業務 agent + seed data + 多語 + **token auto-log** + **sub-agent stub 開始** | 能對話推商品、中英切換、metrics 自動累積 | Q5, Q7 |
+| Day 4（09-10）| 客服 + 訂單查詢 + 退貨 + Lily-B + **OpenClaw/Hermes spike**（移前） | Lily 完整能力、Q1-2 有實據 | Q1, Q2, Q4, Q5, Q7 |
+| Day 5（09-11）| Agent Army 8 sub-agents 完成 + CI/CD → Fly.io + Vercel + handoff → B 端 inbox | 自動化部署 | Q6 |
+| Day 6（09-12）| Polish + 錄 demo 影片 + **rehearse demo 3 次** + Q1-7 定稿 | 交件包 | 全部 |
+| Day 7（09-13）| Buffer / 交件 / 面試準備 | Done | - |
 
-## Demo Storyboard（5 分鐘完整旅程）
+## Demo Storyboard（5 分鐘完整旅程，經 pacing 調整）
 
 | 時間 | 場景 | 秀什麼能力 |
 |---|---|---|
-| 0:00-0:30 | LUNA 首頁 + Lily 打招呼 | C 端 UX |
-| 0:30-0:40 | **切英文**（demo 多語） | 多語 |
-| 0:40-1:30 | 顧問式推薦口紅 + 引評論 | 業務 + 社會證明 |
-| 1:30-2:00 | 「查我上週訂單」→ Lily 讀 order | **訂單查詢** |
-| 2:00-2:30 | 「這隻要退」→ 觸發退貨 | **退貨啟動** |
-| 2:30-2:50 | 「我要真人」→ Lily「已為您轉接」 | **真人 handoff** |
-| 2:50-3:10 | 「有沒有亞洲膚色眉筆」→ Lily 記需求缺口 | 需求缺口 |
-| 3:10-3:30 | 切 B 端 dashboard → 剛剛的 handoff 進 inbox | C+B 聯動 wow |
-| 3:30-4:20 | Lily-B chat 問「本週敏感肌客人」+ pin widget | Conversational BI |
+| 0:00-0:20 | LUNA 首頁 + Lily 打招呼 | C 端 UX |
+| 0:20-0:30 | 切英文 → 切回中文 | 多語 |
+| 0:30-1:20 | 顧問式推薦口紅 + 引評論（50s） | 業務 + 社會證明 |
+| 1:20-1:50 | 「查我上週訂單 xxx@」→ Lily 讀 order（30s） | 訂單查詢 |
+| 1:50-2:20 | 「這隻要退」→ 觸發退貨（30s） | 退貨啟動 |
+| 2:20-2:40 | 「我要真人」→ Lily「已為您轉接」（20s） | 真人 handoff |
+| 2:40-3:00 | 「有沒有亞洲膚色眉筆」→ 記需求缺口（20s） | 需求缺口 |
+| 3:00-3:20 | 切 B 端 dashboard → 剛剛 handoff 進 inbox | C+B 聯動 wow |
+| 3:20-4:20 | Lily-B chat 問「本週敏感肌客人」+ pin widget | Conversational BI |
 | 4:20-5:00 | 秀 GitHub Actions 8 sub-agent → 自動部署 | CI/CD |
+
+### Demo 5 個必達成關鍵劇本（Day 6 rehearse checklist）
+1. Lily-C 開場能認出「品牌名 = LUNA Beauty」，tone 正確
+2. 推薦口紅時**真的引用了評論資料**（不是幻覺）
+3. 訂單查詢**真的回真的訂單**（不編）
+4. Handoff 觸發後 B 端 inbox **即時（<3 秒）**出現
+5. Lily-B 分析回覆能生**圖表 + 洞察建議**（不只文字）
+
+### 面試官會後亂玩的 fallback
+- **Off-brand 問（政治/私人）**：「我專注在 LUNA Beauty 商品，這個我幫不上，回產品聊聊？」
+- **意料外功能問**：「這是 demo scope，Phase X roadmap 會做」
+- **想 hack prompt injection**：backend 有 guardrail，會拒答並記 log
+- **API 掛了**：前端顯示「Lily 暫時休息，1 分鐘後再試」
+
+---
+
+## 🔧 Day 3 Prep 修正（來自 2026-09-09 3-lens review）
+
+### Session / 多輪對話模型
+- Frontend 首次載入生 `session_id`（UUID v4），存 `localStorage`
+- 每個 `/chat` request 帶 `session_id`
+- Backend 用 `session_id` 從 DB 拉最近 10 則歷史，塞給 Gemini 當 context
+- Lily-B 分析時 group by `session_id` 認一場對話
+
+### Cross-agent 資料共享（DB tables）
+| Table | Lily-C | Lily-B | 用途 |
+|---|---|---|---|
+| `conversations` | 寫 | 讀 | 對話全文 |
+| `chat_logs` | 寫（middleware） | 讀 | Token/latency/cost 每 call 一筆 |
+| `handoff_inbox` | 寫 | 讀 | 轉真人事件 |
+| `demand_gaps` | 寫 | 讀 | 客人問但店裡沒有 |
+| `widgets` | - | 寫/讀 | B 端 pin 的自訂 widget |
+| `orders` (seed) | 讀 | 讀 | 訂單查詢 |
+| `products` (seed) | 讀 | 讀 | 商品目錄 |
+| `reviews` (seed) | 讀 | 讀 | 引評論 |
+
+### Token / Cost auto-logging（Q7 evidence 自動化）
+- FastAPI middleware：每次 `/chat` 完成後 insert 一筆到 `chat_logs`
+- 欄位：`timestamp`, `endpoint`, `session_id`, `input_tokens`, `output_tokens`, `latency_ms`, `model`, `cost_estimate`
+- Day 6 收尾用 `SELECT SUM(...)` 一次拿全部數字
+
+### Daily Ritual（Day 3-6 每晚 10 分鐘）
+1. 更新 `process-log.md` 加當日 phases
+2. 更新 `metrics.md` 加當日 tokens/time/cost 摘要
+3. 更新 `q1-7-draft.md` 補新 evidence
+4. Git commit
+
+### 多語策略（clarify）
+- **商品目錄**：seed 時就寫 `name_zh` + `name_en` + `description_zh` + `description_en`（不靠 LLM 即時翻）
+- **對話回覆**：LLM 自動偵測 user 語言 mirror 回覆
+- **UI 文字**：Next.js i18n dict (`lib/i18n.ts`)，中英雙檔
+
+### Handoff mechanism 細節
+- Lily-C 觸發：intent classifier 判定 → 寫 `handoff_inbox` row（status=pending, urgency, transcript）
+- B 端通知：Supabase Realtime subscribe，dashboard 即時彈紅點
+- SLA：暫不做 SLA 計算，只顯示 `created_at` 給 merchant 判斷
+
+### Pin widget auth（B 端多帳號）
+- Demo 版：**單一 merchant 帳號**（`user_id = "demo_merchant"`）
+- 密碼保護（Supabase Auth email + password，seed 一個帳號）
+- 未來多 tenant 是 Phase 3
+
+### 部署 env vars checklist
+**Backend (Fly.io)**：`GEMINI_API_KEY` / `SUPABASE_URL` / `SUPABASE_SERVICE_KEY` / `SENTRY_DSN`（optional）/ `BASIC_AUTH_USER` / `BASIC_AUTH_PASS`
+**Frontend (Vercel)**：`NEXT_PUBLIC_BACKEND_URL` / `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+### 其他約定（低優先）
+- **Model 版本**：主用 `gemini-3.6-flash`，若掛了 fallback `gemini-2.5-flash`
+- **LLM 失敗 UI**：3 秒 timeout → 顯示「Lily 暫時休息，1 分鐘後試試」
+- **Testing framework**：pytest (backend) + vitest (frontend) + Playwright (e2e)
+- **Post-demo roadmap rehearsal**：Day 6 錄 demo 前，Lily 對著 `product-vision.md` 面試講述模板 練 3 次

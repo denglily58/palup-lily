@@ -395,7 +395,187 @@ demand_gaps
 analytics_snapshots  (每小時 aggregate)
   id, period_start, total_conversations, total_conversions,
   total_revenue, top_intents[], top_demand_gaps[]
+
+chat_logs  (每次 /chat middleware 寫，Q7 素材)
+  id, timestamp, endpoint, session_id, input_tokens,
+  output_tokens, latency_ms, model, cost_estimate
 ```
+
+---
+
+## 9b. Seed Data JSON Schemas（Day 3 建立）
+
+### `seed/products.json`
+```json
+[
+  {
+    "id": "prod_001",
+    "sku": "LUNA-LIP-01",
+    "name_zh": "Nude Rose 絲絨唇膏",
+    "name_en": "Nude Rose Velvet Lipstick",
+    "category": "lip",
+    "subcategory": "lipstick",
+    "price": 890,
+    "cost": 245,
+    "shades": [
+      {"code": "01", "name_zh": "珊瑚粉", "name_en": "Coral Bloom", "hex": "#E97462", "undertone": "warm", "stock": 50},
+      {"code": "03", "name_zh": "裸粉", "name_en": "Nude Rose", "hex": "#C88B8A", "undertone": "yellow", "stock": 32},
+      {"code": "05", "name_zh": "可可豆沙", "name_en": "Cocoa Kiss", "hex": "#8B5A4C", "undertone": "cool", "stock": 18}
+    ],
+    "description_zh": "絲絨質地，一抹就顯氣色...",
+    "description_en": "Velvet texture, instantly luminous...",
+    "tags": ["vegan", "cruelty-free", "hero"],
+    "image_url": "/images/nude-rose.png",
+    "created_at": "2026-06-01"
+  }
+]
+```
+
+### `seed/reviews.json`
+```json
+[
+  {
+    "id": "rev_001",
+    "product_id": "prod_001",
+    "shade_code": "03",
+    "rating": 5,
+    "text_zh": "百搭又顯氣色，日常必備",
+    "text_en": "Versatile and brightens complexion",
+    "author": "Emily K.",
+    "created_at": "2026-08-15",
+    "tags": ["yellow-undertone", "daily"]
+  }
+]
+```
+
+### `seed/orders.json`
+```json
+[
+  {
+    "id": "ord_1234",
+    "order_number": "LUNA-1234",
+    "email": "test@example.com",
+    "items": [
+      {"product_id": "prod_001", "shade_code": "03", "qty": 1, "price": 890}
+    ],
+    "total": 890,
+    "status": "shipped",
+    "created_at": "2026-09-05",
+    "shipping_eta": "2026-09-09",
+    "tracking_no": "TW123456789"
+  }
+]
+```
+
+### `seed/shipping_rules.json`
+```json
+{
+  "free_shipping_over": 2000,
+  "zones": [
+    {"zone": "taipei", "name_zh": "台北市", "eta_days": 1, "fee": 60},
+    {"zone": "new_taipei", "name_zh": "新北市", "eta_days": 1, "fee": 60},
+    {"zone": "taiwan_other", "name_zh": "台灣其他", "eta_days": 3, "fee": 80},
+    {"zone": "offshore", "name_zh": "離島", "eta_days": 5, "fee": 150}
+  ],
+  "methods": ["home_delivery", "convenience_store"]
+}
+```
+
+### `seed/policies.json`
+```json
+{
+  "returns": {
+    "window_days": 7,
+    "conditions": "未拆封、含贈品、附發票",
+    "process": "填表 → 客服 confirm → 物流取件 → 3 工作日退款"
+  },
+  "shipping": {
+    "cutoff_time": "14:00",
+    "note": "當日 14:00 前訂單當天出貨"
+  },
+  "promotions": [
+    {"name": "首次購買 10% off", "code": "WELCOME10"}
+  ]
+}
+```
+
+### `seed/conversations.json`（20-30 場預錄）
+```json
+[
+  {
+    "id": "conv_2103",
+    "session_id": "sess_demo_20260901_abc",
+    "actor": "buyer",
+    "lang": "zh",
+    "messages": [
+      {"role": "user", "content": "我敏感肌可以用嗎", "at": "2026-09-01T14:30:00"},
+      {"role": "assistant", "content": "...", "at": "2026-09-01T14:30:03"}
+    ],
+    "intent": "sensitive_skin_query",
+    "status": "answered",
+    "converted": false,
+    "created_at": "2026-09-01T14:30:00"
+  }
+]
+```
+
+---
+
+## 11. Session / 多輪對話模型
+
+```
+Frontend 首次載入
+    ↓
+生 session_id = UUID v4
+    ↓
+存 localStorage["lily_session"]
+    ↓
+每次 /chat request body 含 { session_id, message, lang }
+    ↓
+Backend 收到後：
+    1. 從 conversations table 拉 session_id 最近 10 則
+    2. 組成 context 塞給 Gemini
+    3. 拿到回覆
+    4. 新增一筆 conversation
+    5. 更新 status / intent
+    ↓
+Frontend 顯示回覆
+    ↓
+關頁再開 → localStorage 還在 → 續同一 session
+    ↓
+（Demo 用途）B 端 dashboard 有「Reset demo session」按鈕清 localStorage
+```
+
+---
+
+## 12. Token 自動記錄 middleware（Q7 evidence）
+
+```python
+# backend/app/middleware/token_logger.py
+from fastapi import Request
+from time import monotonic
+
+async def token_logging_middleware(request: Request, call_next):
+    start = monotonic()
+    response = await call_next(request)
+    latency_ms = int((monotonic() - start) * 1000)
+
+    # 從 response header 或 body 抓 token usage
+    if hasattr(response, "chat_usage"):
+        supabase.table("chat_logs").insert({
+            "endpoint": request.url.path,
+            "session_id": ...,
+            "input_tokens": response.chat_usage.prompt,
+            "output_tokens": response.chat_usage.candidates,
+            "latency_ms": latency_ms,
+            "model": response.chat_usage.model,
+            "cost_estimate": estimate_cost(response.chat_usage),
+        }).execute()
+
+    return response
+```
+
+Day 6 收尾：`SELECT SUM(input_tokens), SUM(output_tokens), SUM(cost_estimate) FROM chat_logs` 一次拿全部數字。
 
 ---
 
