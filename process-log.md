@@ -331,4 +331,42 @@
 - Supabase Realtime 5 分鐘就掛通，比自己刻 WebSocket 省超多
 - **Lily 主動要 "測" 是好習慣**：每個 milestone 後真的用一次，抓到 bug 比 unit test 還快
 
-## Day 4+ 待填
+### Phase 18: Day 4 全推 + Day 5 一半（同 09-09 一天壓 2 天）
+
+**發生的事**：
+- Task #22: `tools/handoff.py` + `log_demand_gap` — handoff + demand gap 兩 tools 加進 /chat function calling
+- Task #23: 4 starter widgets 建 → 6 widgets（加 SLA + AI Usage）
+- Task #24: Lily-B 分析師 → `/analytics/chat` endpoint + 4 tools（query_recent_chats/get_demand_gaps/get_handoff_queue/get_sales_summary）+ B端 chat UI + 4 suggested questions
+- Task #25: LUNA store 首頁重寫 → header + hero + 10 商品 grid + chat widget 浮右下 + 可 minimize
+- 商品圖從 LoremFlickr → 手 curate 10 個 Unsplash 直圖（clean e-commerce style）
+- UI polish：card borders → shadows；input dark border 拿掉；merchant 名字英化（Emily Chen / David Wang / Alex Kim）；agent 副標 English (Your Shopping Sidekick / Your Business Copilot)
+- Task #18: Handoff widget 修 bug（只算 human_request 不算 return）+ SLA 80% seed 10 handoff
+- Task #26: 補 5 個 sub-agent stubs（test-runner / e2e / health-check / rollback / pr-reviewer）→ Agent Army 8/8 完成
+- Task #16/#27: Version Control 5 層
+  - Prompts 抽到 `agents/prompts/*.md` 加 frontmatter (version/changed/reason)
+  - `agents/loader.py` runtime 讀 md 檔（backend 啟動時 load）
+  - `agents/model_registry.yaml` 記 3 次 model swap history + rate limit
+  - `agents/registry.yaml` agent config 單一 source of truth
+  - `supabase/migrations/README.md` 流程 + rollback pattern
+
+**踩坑**：
+- Gemini 3.6 flash 免費層 20 req/day 用光 → 換 3.5-flash-lite
+- 2.5-flash + 2.5-flash-lite 都 EOL 給新用戶
+- LoremFlickr 免費但雜亂 → 換手 curate Unsplash
+- StrictMode dev 雙重 useEffect 導致 event_logs 重複 key → dedup by id
+- Handoff widget 混計 return + human_request → 分離
+- Python 3.9 `str | None` → 換 `Optional[str]`（第 N 次）
+
+**產出**：
+- 4 個新 commits，最新 `feat(v0.4): Day 4 + 5 sub-agents + version control`
+- **80% demo storyboard 可跑**（訂單/退貨/handoff/需求缺口/多語/multi-turn/realtime/dashboard 6 widgets/Lily-B chat/product feed）
+- Agent Army 8 個 stub 完備
+- Version Control 5 層真正跑起來（runtime read）
+
+**觀察**（Q3 素材）：
+- **一天壓四天是特例**：能做完是因為（1）產品範圍已 lock（2）架構 Day 1 就定完（3）Lily 專注沒中斷 —— 未來別複製
+- **Function calling > context inject**：Lily-C 5 個 tools + Lily-B 4 個 tools 都用 Gemini automatic function calling，比手刻 intent classifier 乾淨、Q4/Q5 講述有料
+- **模型版本管理是真痛點**：一天內模型換 3 次，證明 Version Control B (model_registry.yaml) 不是 over-engineering
+- Unsplash curate 10 圖 6 個成功 4 個 web fetch 失敗需重試 → 未來類似「curate 一批 URL」的任務要 tolerate 60% 成功率
+
+## Day 5+ 待填
