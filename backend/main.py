@@ -171,6 +171,7 @@ def chat(req: ChatRequest):
     append_to_session(req.session_id, "user", req.message)
     append_to_session(req.session_id, "assistant", reply_text)
 
+    # Local JSONL for Q7 token/cost aggregation
     log_chat(
         session_id=req.session_id,
         endpoint="/chat",
@@ -180,6 +181,20 @@ def chat(req: ChatRequest):
         model=MODEL,
         lang=req.lang,
         user_msg_preview=req.message,
+    )
+
+    # Also write to Supabase event_logs so B端 activity log sees it
+    log_event(
+        user_id=None,  # buyer is anonymous
+        user_email="buyer (anonymous)",
+        action="chat_query",
+        target=req.session_id,
+        metadata={
+            "message_preview": req.message[:100],
+            "lang": req.lang,
+            "input_tokens": input_tokens,
+            "output_tokens": output_tokens,
+        },
     )
 
     return ChatResponse(

@@ -28,6 +28,8 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+
     (async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
@@ -36,12 +38,31 @@ export default function AdminPage() {
       }
       setUser(session.user);
 
+      // Authenticate realtime channel with user session (RLS respects this)
+      supabase.realtime.setAuth(session.access_token);
+
       // Fetch recent events from backend
       const res = await fetch(`${BACKEND}/events?limit=30`);
       const data = await res.json();
       setEvents(data.events || []);
       setLoading(false);
+
+      // Realtime subscribe: unique channel name to avoid React StrictMode double-subscribe
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      channel = (supabase.channel(`event_logs_${Date.now()}`) as any)
+        .on(
+          "postgres_changes",
+          { event: "INSERT", schema: "public", table: "event_logs" },
+          (payload: { new: EventRow }) => {
+            setEvents((prev) => [payload.new, ...prev].slice(0, 50));
+          }
+        )
+        .subscribe();
     })();
+
+    return () => {
+      if (channel) supabase.removeChannel(channel);
+    };
   }, [router]);
 
   async function handleLogout() {
