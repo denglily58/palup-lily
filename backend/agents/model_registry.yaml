@@ -1,0 +1,54 @@
+# Model Registry — LUNA × Lily
+# Maps each agent to a primary model + fallback chain.
+# When primary model returns 4xx (deprecated/EOL) or 429 (rate limit), backend auto-tries next.
+# Updated: 2026-09-09
+
+version: 1.0.0
+
+models:
+
+  lily_c:
+    primary: gemini-3.5-flash-lite
+    fallbacks:
+      - gemini-3-flash-preview
+      - gemini-flash-latest
+    reason: >
+      Buyer chat runs high volume; lite model matches cost/quality trade.
+      Fallback to preview if lite deprecated (learned from 3.6-flash 20 req/day quota shock).
+    history:
+      - 2026-09-08 initial: gemini-3.6-flash
+      - 2026-09-09 swap 1: gemini-3.6-flash → gemini-2.5-flash (2.5 EOL for new users)
+      - 2026-09-09 swap 2: gemini-2.5-flash → gemini-2.5-flash-lite (EOL)
+      - 2026-09-09 swap 3: gemini-2.5-flash-lite → gemini-3.5-flash-lite (working)
+
+  lily_b:
+    primary: gemini-3.5-flash-lite
+    fallbacks:
+      - gemini-3-flash-preview
+    reason: >
+      Same as lily_c — tool-heavy analyst still fits in lite model window.
+      Consider upgrading to gemini-flash (non-lite) if response quality drops.
+    history:
+      - 2026-09-09 initial: gemini-3.5-flash-lite
+
+# Cost benchmarks (per 1M tokens, USD, 2026-09)
+pricing:
+  gemini-3.5-flash-lite:
+    input: 0.075
+    output: 0.30
+  gemini-3.6-flash:
+    input: 0.075  # same tier but 20 req/day free quota
+    output: 0.30
+  gemini-flash-latest:
+    input: 0.15
+    output: 0.60
+
+# Rate limits (free tier as of 2026-09)
+free_tier_limits:
+  gemini-3.5-flash-lite:
+    req_per_minute: 15
+    req_per_day: 1500
+    tokens_per_minute: 1_000_000
+  gemini-3.6-flash:
+    req_per_minute: 15
+    req_per_day: 20  # ← burnt us Day 3

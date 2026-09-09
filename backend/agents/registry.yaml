@@ -1,0 +1,68 @@
+# Agent Registry — LUNA × Lily
+# Central definition of every runtime agent: prompt version, model, tools, context injection.
+# Change here → agent behavior changes (single source of truth, A/B-testable).
+# Updated: 2026-09-09
+
+version: 1.0.0
+
+agents:
+
+  lily_c:
+    version: 1.0.0
+    persona: Your Shopping Sidekick
+    prompts:
+      en: prompts/lily_c_en_v1.md
+      zh: prompts/lily_c_zh_v1.md
+    model_ref: lily_c   # → resolves via model_registry.yaml
+    tools:
+      - lookup_order_by_email
+      - lookup_order_by_number
+      - initiate_return
+      - request_human_agent
+      - log_demand_gap
+    context_injection:
+      - catalog          # products + top reviews (~1600 tokens)
+      - shipping         # US zones + methods
+      - policies         # returns, promos, loyalty
+    session_memory:
+      window: 10          # last N messages replayed as context
+      max_len: 20         # cap per session id
+    guardrails:
+      - never_invent_products
+      - never_invent_prices
+      - never_invent_reviews
+      - answer_off_topic_off_brand: politely_decline
+    endpoint: POST /chat
+    lang_default: en
+    lang_supported: [en, zh]
+
+  lily_b:
+    version: 1.0.0
+    persona: Your Business Copilot
+    prompts:
+      en: prompts/lily_b_en_v1.md
+    model_ref: lily_b
+    tools:
+      - query_recent_chats
+      - get_demand_gaps
+      - get_handoff_queue
+      - get_sales_summary
+    context_injection: []     # tool-first, no bulk inject
+    session_memory:
+      window: 10
+      max_len: 20
+    guardrails:
+      - always_call_tools_for_numbers   # no hallucinated stats
+      - structure_answers_3_parts       # (finding, interpretation, action)
+    endpoint: POST /analytics/chat
+    lang_default: en
+    lang_supported: [en]
+
+# CI/CD sub-agents (managed elsewhere: `sub-agents/` directory)
+# See sub-agents/README.md for the 8 Agent Army definitions.
+
+# How to change an agent
+# 1. Edit prompt file → bump version in frontmatter + note reason
+# 2. Edit this file → bump agents.<name>.version
+# 3. Optional: A/B test by pointing prompts.en to a v2 file
+# 4. Commit + `git tag agent-<name>-v<version>` for release

@@ -46,18 +46,18 @@
   PR opened → pr-reviewer-agent (自動 review)
 ```
 
-## 已建立的 stubs（Day 3 進度）
+## 8 Sub-agents（Agent Army 完整）
 
 | # | Agent | 檔案 | 狀態 |
 |---|---|---|---|
-| 1 | linter-agent | `linter-agent.md` | ✅ stub |
-| 2 | security-agent | `security-agent.md` | ✅ stub |
-| 3 | deploy-agent | `deploy-agent.md` | ✅ stub |
-| 4 | test-runner-agent | `test-runner-agent.md` | ⏳ Day 5 |
-| 5 | e2e-agent | `e2e-agent.md` | ⏳ Day 5 |
-| 6 | health-check-agent | `health-check-agent.md` | ⏳ Day 5 |
-| 7 | rollback-agent | `rollback-agent.md` | ⏳ Day 5 |
-| 8 | pr-reviewer-agent | `pr-reviewer-agent.md` | ⏳ Day 5 |
+| 1 | linter-agent | `linter-agent.md` | ✅ |
+| 2 | security-agent | `security-agent.md` | ✅ |
+| 3 | test-runner-agent | `test-runner-agent.md` | ✅ |
+| 4 | e2e-agent | `e2e-agent.md` | ✅ |
+| 5 | deploy-agent | `deploy-agent.md` | ✅ |
+| 6 | health-check-agent | `health-check-agent.md` | ✅ |
+| 7 | rollback-agent | `rollback-agent.md` | ✅ |
+| 8 | pr-reviewer-agent | `pr-reviewer-agent.md` | ✅ |
 
 ## 自動化程度矩陣（Q6 講述用）
 
