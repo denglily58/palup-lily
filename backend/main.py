@@ -13,6 +13,7 @@ from pydantic import BaseModel
 
 from tools.catalog import full_context
 from tools.metrics import aggregate, log_chat
+from db.supabase_client import log_event, recent_events
 
 load_dotenv(Path(__file__).parent / ".env")
 
@@ -110,6 +111,33 @@ def reset_session(session_id: str):
     """Clear a session's memory. Used by 'Reset conversation' demo button."""
     _sessions.pop(session_id, None)
     return {"status": "reset", "session_id": session_id}
+
+
+class EventPayload(BaseModel):
+    user_id: Optional[str] = None
+    user_email: Optional[str] = None
+    action: str
+    target: Optional[str] = None
+    metadata: Optional[dict] = None
+
+
+@app.post("/events")
+def post_event(payload: EventPayload):
+    """Log an event (login, logout, pin, etc) to event_logs table."""
+    log_event(
+        user_id=payload.user_id,
+        user_email=payload.user_email,
+        action=payload.action,
+        target=payload.target,
+        metadata=payload.metadata,
+    )
+    return {"status": "logged"}
+
+
+@app.get("/events")
+def get_events(limit: int = 50):
+    """Fetch recent events for B端 activity log tab."""
+    return {"events": recent_events(limit=limit)}
 
 
 @app.post("/chat", response_model=ChatResponse)
