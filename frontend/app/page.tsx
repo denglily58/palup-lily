@@ -8,6 +8,7 @@ const BACKEND = "http://localhost:8080";
 
 export default function Home() {
   const [lang, setLang] = useState<"en" | "zh">("en");
+  const [sessionId, setSessionId] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
@@ -19,9 +20,33 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  // Generate / restore session_id on first mount
+  useEffect(() => {
+    let id = localStorage.getItem("luna_lily_session");
+    if (!id) {
+      id = crypto.randomUUID();
+      localStorage.setItem("luna_lily_session", id);
+    }
+    setSessionId(id);
+  }, []);
+
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, loading]);
+
+  async function resetConversation() {
+    if (!sessionId) return;
+    await fetch(`${BACKEND}/reset?session_id=${sessionId}`, { method: "POST" });
+    setMessages([
+      {
+        role: "assistant",
+        content:
+          lang === "en"
+            ? "Conversation reset ✨ Fresh start — what are you looking for?"
+            : "對話已重設 ✨ 從頭開始 — 想找什麼？",
+      },
+    ]);
+  }
 
   function toggleLang() {
     const next = lang === "en" ? "zh" : "en";
@@ -49,7 +74,7 @@ export default function Home() {
       const res = await fetch(`${BACKEND}/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text, lang }),
+        body: JSON.stringify({ message: text, lang, session_id: sessionId }),
       });
       if (!res.ok) throw new Error(`Backend ${res.status}`);
       const data = await res.json();
@@ -89,6 +114,13 @@ export default function Home() {
               LUNA Beauty · v0.2
             </div>
           </div>
+          <button
+            onClick={resetConversation}
+            className="text-xs px-2 py-1 rounded-full bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50"
+            title="Reset conversation"
+          >
+            ⟳
+          </button>
           <button
             onClick={toggleLang}
             className="text-xs px-2 py-1 rounded-full bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50"

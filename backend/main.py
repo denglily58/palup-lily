@@ -1,6 +1,8 @@
 """LUNA × Lily — FastAPI backend entry point."""
 import os
 from pathlib import Path
+from time import monotonic
+from typing import Optional
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
@@ -8,6 +10,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from google import genai
 from google.genai import types
 from pydantic import BaseModel
+
+from tools.catalog import full_context
+from tools.metrics import aggregate, log_chat
 
 load_dotenv(Path(__file__).parent / ".env")
 
@@ -24,6 +29,35 @@ app.add_middleware(
 gemini = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 
 MODEL = "gemini-3.6-flash"
+
+# In-memory session store (demo only; production uses Supabase)
+_sessions: dict = {}
+MAX_HISTORY = 10  # last N messages per session
+MAX_SESSION_LEN = 20  # cap to avoid memory bloat
+
+
+def get_history(session_id: Optional[str]) -> list:
+    if not session_id:
+        return []
+    return _sessions.get(session_id, [])[-MAX_HISTORY:]
+
+
+def append_to_session(session_id: Optional[str], role: str, content: str) -> None:
+    if not session_id:
+        return
+    _sessions.setdefault(session_id, []).append({"role": role, "content": content})
+    if len(_sessions[session_id]) > MAX_SESSION_LEN:
+        _sessions[session_id] = _sessions[session_id][-MAX_SESSION_LEN:]
+
+
+def format_history(history: list) -> str:
+    if not history:
+        return ""
+    lines = ["## Recent Conversation"]
+    for m in history:
+        role = "User" if m["role"] == "user" else "Lily"
+        lines.append(f"{role}: {m['content']}")
+    return "\n".join(lines) + "\n"
 
 SYSTEM_PROMPT_EN = (
     "You are Lily, AI beauty consultant for LUNA Beauty, a vegan cruelty-free "
@@ -49,6 +83,7 @@ SYSTEM_PROMPT_ZH = (
 class ChatRequest(BaseModel):
     message: str
     lang: str = "en"
+    session_id: Optional[str] = None
 
 
 class ChatResponse(BaseModel):
@@ -56,6 +91,7 @@ class ChatResponse(BaseModel):
     model: str
     input_tokens: int
     output_tokens: int
+    cost_usd: float
 
 
 @app.get("/health")
@@ -63,21 +99,65 @@ def health():
     return {"status": "ok", "service": "lily-backend", "version": "0.2.0"}
 
 
+@app.get("/metrics")
+def metrics():
+    """Aggregate token/cost/latency stats — used by B端 AI usage widget."""
+    return aggregate()
+
+
+@app.post("/reset")
+def reset_session(session_id: str):
+    """Clear a session's memory. Used by 'Reset conversation' demo button."""
+    _sessions.pop(session_id, None)
+    return {"status": "reset", "session_id": session_id}
+
+
 @app.post("/chat", response_model=ChatResponse)
 def chat(req: ChatRequest):
     system = SYSTEM_PROMPT_ZH if req.lang == "zh" else SYSTEM_PROMPT_EN
+    catalog = full_context(req.lang)
+    history = get_history(req.session_id)
+    history_text = format_history(history)
+    full_prompt = f"{system}\n\n{catalog}\n\n{history_text}User: {req.message}"
+
+    start = monotonic()
     try:
         response = gemini.models.generate_content(
             model=MODEL,
-            contents=f"{system}\n\nUser: {req.message}",
+            contents=full_prompt,
         )
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"Gemini error: {exc}")
 
+    latency_ms = int((monotonic() - start) * 1000)
     usage = response.usage_metadata
-    return ChatResponse(
-        reply=response.text or "",
+    input_tokens = (usage.prompt_token_count if usage else 0) or 0
+    output_tokens = (usage.candidates_token_count if usage else 0) or 0
+
+    from tools.metrics import estimate_cost
+    cost = estimate_cost(input_tokens, output_tokens, MODEL)
+
+    reply_text = response.text or ""
+
+    # Append this turn to session memory for future context
+    append_to_session(req.session_id, "user", req.message)
+    append_to_session(req.session_id, "assistant", reply_text)
+
+    log_chat(
+        session_id=req.session_id,
+        endpoint="/chat",
+        input_tokens=input_tokens,
+        output_tokens=output_tokens,
+        latency_ms=latency_ms,
         model=MODEL,
-        input_tokens=(usage.prompt_token_count if usage else 0) or 0,
-        output_tokens=(usage.candidates_token_count if usage else 0) or 0,
+        lang=req.lang,
+        user_msg_preview=req.message,
+    )
+
+    return ChatResponse(
+        reply=reply_text,
+        model=MODEL,
+        input_tokens=input_tokens,
+        output_tokens=output_tokens,
+        cost_usd=round(cost, 6),
     )

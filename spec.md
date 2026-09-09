@@ -262,17 +262,25 @@
 
 ---
 
-## 一週作戰藍圖（3-lens review 後 refined）
+## 一週作戰藍圖（09-09 重算，多一天 buffer）
 
-| Day | 階段 | 產出 | Q 素材 |
+**Day 1+2 昨天壓一天完成**，實際今天是 working Day 2。總計約 30-35 hr 可用工時 vs. ~25 hr 總 scope。
+
+| 日期 | Working Day | 內容 | Q 素材 |
 |---|---|---|---|
-| Day 1（09-08）| 需求收斂 + 選型 + mockup + 建骨架 | Spec + mockup + 5 個素材檔 + 空專案 | Q3 |
-| Day 2（09-08）| 安裝 Superpowers/Gstack/Agency-Agents + 帳號 + Agent hello | Chat UI 開起來、agent 回 hi | Q4, Q5 |
-| Day 3（09-09）| seed data + 多語 + token auto-log + sub-agent stub + **SSO + event log** | 能對話推商品、多用戶登入、metrics 累積 | Q5, Q7 |
-| Day 4（09-10）| 訂單/退貨/handoff（含 SLA fake）+ Lily-B + **AI 使用量 widget** + OpenClaw spike | 完整客服 + 帳單透明 + Q1-2 有實據 | Q1, Q2, Q4, Q5, Q7 |
-| Day 5（09-11）| Agent Army 8 sub-agents + CI/CD → Fly.io + Vercel + Data scale doc | 自動化部署、面試 scale 故事 | Q6 |
-| Day 6（09-12）| Polish + 錄 demo 影片 + **rehearse demo 3 次** + Q1-7 定稿 | 交件包 | 全部 |
-| Day 7（09-13）| Buffer / 交件 / 面試準備 | Done | - |
+| 09-08 | Day 1（昨） | ✅ 需求 + 選型 + 骨架 + agent hello | Q3, Q4, Q5 |
+| **09-09** | **Day 2（今）** | seed data ✅ + 商品推薦 + 多語 + session + token log + 開始 SSO | Q5, Q7 |
+| 09-10 | Day 3 | 完 SSO + event log + 訂單查詢 + 退貨 + version control C（semver+CHANGELOG） | Q4, Q5 |
+| 09-11 | Day 4 | handoff（+ SLA fake）+ Lily-B（雙人格）+ version control A+B（prompt+model） | Q4, Q5 |
+| 09-12 | Day 5 | AI usage widget + Agent Army 8 sub-agents + version control D+E（migrations + agents.yaml） | Q6 |
+| 09-13 | Day 6 | CI/CD → Fly.io + Vercel 部署 + OpenClaw / Hermes spike | Q1, Q2, Q6 |
+| **09-14** | **Day 7 (buffer)** | Polish + demo rehearse 3x + Q1-7 定稿（**不錄影 — Lily 09-09 決策**） | 全部 |
+| 09-15 | 交件 | 上傳 + 面試準備 | - |
+
+### 每天投入
+- 平均 **5 hr/day** × 6 天 = 30 hr（vs. 25 hr scope，5 hr buffer）
+- 09-14 buffer 專門處理 rehearse + Q1-7 defense + 錄影
+- 09-15 純交件 + 心理準備，不寫 code
 
 ## Demo Storyboard（5 分鐘完整旅程，經 pacing 調整）
 
