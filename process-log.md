@@ -303,4 +303,32 @@
 
 ---
 
+### Phase 17: Day 3 執行（seed data → tools → auth → realtime → git tag）
+
+**發生的事**（一段跑完，因 Lily 決定繼續衝）：
+- Task #11: 生 5 個 seed JSON（10 SKU 含色號 + 25 reviews + 30 orders + shipping + policies）— bilingual EN 為主
+- Task #12: `tools/catalog.py` 把 6192 chars catalog inject 進 system prompt，Lily-C 開始會查商品、引評論、講運費（實測 pass）
+- Task #14: `tools/metrics.py` 每次 /chat 寫 JSONL + `/metrics` 端點 aggregate
+- Task #13: 前端 localStorage session_id + `/reset` endpoint + multi-turn memory（10-msg window）— 實測跨 turn 記得 lipstick context
+- Task #15: 3 sub-agent stubs（linter / security / deploy）寫進 `sub-agents/`
+- **Rebrand**：LUNA Botanica → LUNA Beauty（Lily 決定改名）
+- **Market pivot**：Lily 補充「PalUp 主市場 = Shopify Plus 北美」→ UI 主語言英文、merchant 名字英化（Emily Chen / David Wang / Alex Kim）
+- Task #17: Supabase project setup（Lily 手動 5min）→ event_logs / chat_logs / widgets / handoff_inbox / demand_gaps 5 表 + RLS + seed 3 users + `/login` + `/admin` + Supabase Realtime
+- **踩坑**：Python 3.9 不支援 `str | None`（改 `Optional[str]`）；TextEdit 存 .env 存空；Gemini 3.6-flash 免費層 20 req/day 用光；React StrictMode 造成 realtime duplicate subscribe
+- **Model 3 次 swap**：`gemini-3.6-flash` → `gemini-2.5-flash`（EOL）→ `gemini-2.5-flash-lite`（EOL）→ `gemini-3.5-flash-lite`（成功）
+- Task #19: `tools/orders.py` — lookup by email / by order#，用 Gemini automatic function calling
+- Task #20: `tools/returns.py` — 建 return_id + 寫入 Supabase `handoff_inbox`（實測 Supabase 有 row）
+- Task #21: `CHANGELOG.md` (Keep-a-Changelog 格式) + git tag `v0.3.0`
+
+**產出**：
+- 7 個新 commits，最新 `v0.3.0` tag
+- 55% demo storyboard 已可跑（推薦 / 訂單 / 退貨 / 多語 / multi-turn / realtime）
+- Q1-Q7 素材大幅累積：Q4/Q5（Gemini function calling + Supabase + Superpowers/Gstack/Agency-Agents 全部實際用過）、Q7（chat_logs 有真實 20+ 次呼叫的 tokens/cost 數字）
+
+**觀察**（Q3 反思）：
+- **Model 版本管理是真痛點**（3 個 model 名字爆炸），驗證了我們 spec 加 Version Control B 的必要性
+- **Function calling 比 context inject 乾淨**：Lily-C tool 呼叫走 Gemini 自動 route，不用手寫 intent classifier
+- Supabase Realtime 5 分鐘就掛通，比自己刻 WebSocket 省超多
+- **Lily 主動要 "測" 是好習慣**：每個 milestone 後真的用一次，抓到 bug 比 unit test 還快
+
 ## Day 4+ 待填

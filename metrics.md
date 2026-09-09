@@ -50,8 +50,21 @@
 | Lily 陪跑時間 | 待統計 |
 | 使用工具 | Claude Code、WebSearch、Memory、TaskCreate |
 
-### Day 2 — 待填
-### Day 3 — 待填
+### Day 2 (09-08 晚) + Day 3 (09-09) — 合併紀錄
+
+| 項目 | 值 |
+|---|---|
+| 主要工作 | catalog / session / SSO / event log / realtime / order tools / return + CHANGELOG |
+| 產出 LoC | frontend ~500 + backend ~600（不含 seed/docs） |
+| 產出 seed JSON | ~600 行 |
+| 產出 docs 更新 | ~200 行 |
+| Model | `gemini-3.6-flash` → 切 `gemini-3.5-flash-lite`（免費層限制） |
+| Tokens (實測 chat_logs) | 累計 ~15,000+ tokens across 20+ chats |
+| 花費 | ~$0.005 (免費層完全 cover) |
+| 純 dev 時間 | Lily 陪跑 ~7 hr（跨兩天）; Claude 執行 ~4 hr（wall clock 含 web fetch/build） |
+| 使用工具 | Claude Code、Superpowers、Gstack、Agency-Agents、TaskCreate/Update、WebSearch、Supabase Python+JS SDK、Google Genai SDK |
+
+### Day 4 — 待填
 ### Day 4 — 待填
 ### Day 5 — 待填
 ### Day 6 — 待填
