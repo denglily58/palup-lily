@@ -7,8 +7,13 @@ type Message = { role: "user" | "assistant"; content: string };
 const BACKEND = "http://localhost:8080";
 
 export default function Home() {
+  const [lang, setLang] = useState<"en" | "zh">("en");
   const [messages, setMessages] = useState<Message[]>([
-    { role: "assistant", content: "Hi 我是 Lily ✨ 想找什麼樣的美妝？我可以幫你選色、比較評價。" },
+    {
+      role: "assistant",
+      content:
+        "Hi, I'm Lily ✨ Looking for something? I can help with shade matching, reviews, shipping, and returns.",
+    },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -17,6 +22,21 @@ export default function Home() {
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, loading]);
+
+  function toggleLang() {
+    const next = lang === "en" ? "zh" : "en";
+    setLang(next);
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: "assistant",
+        content:
+          next === "en"
+            ? "Switched to English ✨ How can I help?"
+            : "已切換為中文 ✨ 有什麼我可以幫你的嗎？",
+      },
+    ]);
+  }
 
   async function send() {
     const text = input.trim();
@@ -29,7 +49,7 @@ export default function Home() {
       const res = await fetch(`${BACKEND}/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text, lang: "zh" }),
+        body: JSON.stringify({ message: text, lang }),
       });
       if (!res.ok) throw new Error(`Backend ${res.status}`);
       const data = await res.json();
@@ -38,7 +58,13 @@ export default function Home() {
       const msg = err instanceof Error ? err.message : "unknown";
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: `抱歉出錯了 (${msg})，backend 可能沒開。` },
+        {
+          role: "assistant",
+          content:
+            lang === "en"
+              ? `Something went wrong (${msg}) — the backend may be offline.`
+              : `抱歉出錯了 (${msg}) — backend 可能沒開。`,
+        },
       ]);
     } finally {
       setLoading(false);
@@ -60,9 +86,16 @@ export default function Home() {
             <div className="font-medium text-sm">Lily</div>
             <div className="text-xs text-neutral-500 flex items-center gap-1">
               <span className="w-2 h-2 bg-emerald-400 rounded-full" />
-              LUNA Beauty · Hello World v0.1
+              LUNA Beauty · v0.2
             </div>
           </div>
+          <button
+            onClick={toggleLang}
+            className="text-xs px-2 py-1 rounded-full bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50"
+            title="Switch language"
+          >
+            {lang === "en" ? "EN" : "中"}
+          </button>
         </div>
 
         {/* Messages */}
@@ -89,7 +122,7 @@ export default function Home() {
             <div className="flex gap-2 items-start">
               <div className="w-6 h-6 rounded-full bg-gradient-to-br from-purple-300 to-pink-300 flex-shrink-0" />
               <div className="bg-neutral-100 rounded-2xl px-3 py-2 text-sm text-neutral-500">
-                Lily 正在打字...
+                {lang === "en" ? "Lily is typing..." : "Lily 正在打字..."}
               </div>
             </div>
           )}
@@ -101,7 +134,7 @@ export default function Home() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && send()}
-            placeholder="輸入訊息..."
+            placeholder={lang === "en" ? "Type a message..." : "輸入訊息..."}
             className="flex-1 px-4 py-2 rounded-full bg-neutral-100 text-sm outline-none focus:ring-2 focus:ring-purple-300"
             disabled={loading}
           />

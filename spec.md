@@ -79,11 +79,13 @@
 ### B 端 Dashboard（chat-first + 快速指標卡）
 **Conversational BI 架構** — 頂部快速指標卡 + 老闆用自然語言問 Lily-B
 
-**4 個模組**：
+**6 個模組**（原 4 個 + 3-lens review 後 +2）：
 1. **對話全文 + 意圖標籤即時流**
 2. **需求缺口**（客人問過但店裡沒賣）
-3. **問答回覆狀態**（每題答得如何）
+3. **問答回覆狀態**（每題答得如何，含 SLA compliance）
 4. **💰 商業指標即時儀表**（今日對話→轉單/AoV/AI 成本 vs. 收入）
+5. **🤖 AI 使用量**（tokens/cost 本月累計、趨勢、每對話成本）
+6. **📋 活動記錄**（多帳號 audit log by user/action/date）
 
 ### Lily 雙人格
 | 人格 | 對誰 | 幹嘛 |
@@ -266,9 +268,9 @@
 |---|---|---|---|
 | Day 1（09-08）| 需求收斂 + 選型 + mockup + 建骨架 | Spec + mockup + 5 個素材檔 + 空專案 | Q3 |
 | Day 2（09-08）| 安裝 Superpowers/Gstack/Agency-Agents + 帳號 + Agent hello | Chat UI 開起來、agent 回 hi | Q4, Q5 |
-| Day 3（09-09）| 業務 agent + seed data + 多語 + **token auto-log** + **sub-agent stub 開始** | 能對話推商品、中英切換、metrics 自動累積 | Q5, Q7 |
-| Day 4（09-10）| 客服 + 訂單查詢 + 退貨 + Lily-B + **OpenClaw/Hermes spike**（移前） | Lily 完整能力、Q1-2 有實據 | Q1, Q2, Q4, Q5, Q7 |
-| Day 5（09-11）| Agent Army 8 sub-agents 完成 + CI/CD → Fly.io + Vercel + handoff → B 端 inbox | 自動化部署 | Q6 |
+| Day 3（09-09）| seed data + 多語 + token auto-log + sub-agent stub + **SSO + event log** | 能對話推商品、多用戶登入、metrics 累積 | Q5, Q7 |
+| Day 4（09-10）| 訂單/退貨/handoff（含 SLA fake）+ Lily-B + **AI 使用量 widget** + OpenClaw spike | 完整客服 + 帳單透明 + Q1-2 有實據 | Q1, Q2, Q4, Q5, Q7 |
+| Day 5（09-11）| Agent Army 8 sub-agents + CI/CD → Fly.io + Vercel + Data scale doc | 自動化部署、面試 scale 故事 | Q6 |
 | Day 6（09-12）| Polish + 錄 demo 影片 + **rehearse demo 3 次** + Q1-7 定稿 | 交件包 | 全部 |
 | Day 7（09-13）| Buffer / 交件 / 面試準備 | Done | - |
 
@@ -338,22 +340,83 @@
 - **對話回覆**：LLM 自動偵測 user 語言 mirror 回覆
 - **UI 文字**：Next.js i18n dict (`lib/i18n.ts`)，中英雙檔
 
-### Handoff mechanism 細節
+### Handoff mechanism 細節（含 SLA fake 資料）
 - Lily-C 觸發：intent classifier 判定 → 寫 `handoff_inbox` row（status=pending, urgency, transcript）
 - B 端通知：Supabase Realtime subscribe，dashboard 即時彈紅點
-- SLA：暫不做 SLA 計算，只顯示 `created_at` 給 merchant 判斷
+- **SLA 承諾**：工作日 4hr、Weekend 12hr
+- **Fake 完整 demo**：seed 10 筆歷史 handoff，8 準時、2 過期 → dashboard 顯示 80% SLA compliance
 
-### Pin widget auth（B 端多帳號）
-- Demo 版：**單一 merchant 帳號**（`user_id = "demo_merchant"`）
-- 密碼保護（Supabase Auth email + password，seed 一個帳號）
-- 未來多 tenant 是 Phase 3
+### SSO + 多帳號 + Event Log（**Enterprise-level**）
+- **登入**：Supabase Auth + Google OAuth，用戶用 Google 一鍵登入
+- **User 區分**：seed 3 個 merchant 內勤角色
+  - `emily@luna.beauty`（**Emily Chen, E-commerce Manager**）
+  - `david@luna.beauty`（**David Wang, Marketing Manager**）
+  - `alex@luna.beauty`（**Alex Kim, Admin**）
+- **Pin/widget 綁 user_id**：不同角色看到不同儀表卡
+- **Event log**（audit trail）：
+  - Table：`event_logs (id, user_id, action, target, metadata, timestamp)`
+  - Action 例：`login / logout / pin_widget / unpin / chat_query / handoff_taken / export`
+  - Dashboard 新 tab **「活動記錄」**顯示可篩選 by user / by action / by date
+
+### Token 使用量 + Cost/Pricing 作為 B 端 first-class feature
+- **B 端 Dashboard 加 widget**：**「AI 使用量」**
+  - 累計 tokens（本月）
+  - 累計成本（本月 $）
+  - 過去 30 天趨勢圖
+  - Cost per conversation 顯示在每場對話下方
+- **收費模型**（詳見 `product-vision.md` Pricing Model section）：
+  - Starter $99/mo（1000 對話/月）
+  - Growth $499/mo（10000 對話/月）
+  - Enterprise $2999+/mo（無限 + SSO + audit + SLA）
+- **面試講述金句**：Token 透明化 = 讓 merchant 信任 AI 成本可控
 
 ### 部署 env vars checklist
 **Backend (Fly.io)**：`GEMINI_API_KEY` / `SUPABASE_URL` / `SUPABASE_SERVICE_KEY` / `SENTRY_DSN`（optional）/ `BASIC_AUTH_USER` / `BASIC_AUTH_PASS`
 **Frontend (Vercel)**：`NEXT_PUBLIC_BACKEND_URL` / `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
-### 其他約定（低優先）
-- **Model 版本**：主用 `gemini-3.6-flash`，若掛了 fallback `gemini-2.5-flash`
+### 其他約定
 - **LLM 失敗 UI**：3 秒 timeout → 顯示「Lily 暫時休息，1 分鐘後試試」
 - **Testing framework**：pytest (backend) + vitest (frontend) + Playwright (e2e)
 - **Post-demo roadmap rehearsal**：Day 6 錄 demo 前，Lily 對著 `product-vision.md` 面試講述模板 練 3 次
+
+### Version Control（5 層）
+
+**A. Prompt versioning**
+- 每個 system prompt 檔加 frontmatter `version: 1.0 | changed: 2026-09-09 | reason: ...`
+- 位置：`backend/agents/prompts/*.md`
+- 改動需寫 change reason，可 rollback
+
+**B. Model versioning**
+- `backend/agents/model_registry.yaml` 記錄每個 agent 用什麼 model + 為何選
+- 例：`lily_c: gemini-3.6-flash, fallback: gemini-2.5-flash, reason: cost/quality trade`
+- Model 掛了自動 fallback（try/except + swap）
+
+**C. Semver + CHANGELOG.md**
+- 產品版號：v0.1 (Day 2 hello) → v0.2 (Day 3 seed+多語) → v0.3 (Day 4 客服) → v0.5 (Day 5 CI/CD) → v1.0 (Day 6 交件)
+- CHANGELOG.md：每個 release 手寫 or 用 `git-cliff` 自動生
+- 每次 git tag 對應 release
+
+**D. DB schema migrations**
+- Supabase 內建 migration files（`supabase/migrations/*.sql`）
+- 每個表變動一個 migration，可前進 / 回滾
+- Day 3 用 migration 建 chat_logs / event_logs / handoff_inbox / demand_gaps / widgets 5 個新表
+
+**E. Agent config version（agents.yaml）**
+- `backend/agents/registry.yaml` 集中管理：
+  ```yaml
+  agents:
+    lily_c:
+      version: 1.0
+      model: gemini-3.6-flash
+      prompt: prompts/lily_c_v1.md
+      tools: [products.search, orders.lookup, reviews.summarize, ...]
+    lily_b:
+      version: 1.0
+      model: gemini-3.6-flash
+      prompt: prompts/lily_b_v1.md
+      tools: [conversations.query, analytics.aggregate, ...]
+  ```
+- 換 config 即換 agent 行為，可 A/B test
+
+**Q1-Q2 面試講述金句**：
+> 「AI 系統的痛點就是**沒有 diff-able 的版本控制** —— prompt 改一句話行為完全不同，但沒有 git blame。我做了 5 層 version control：prompt / model / product / schema / agent config 全部可追蹤可 rollback。」

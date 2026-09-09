@@ -144,3 +144,65 @@
 ### 若被問「為什麼 demo 用 Gemini 不是 Claude」
 
 「Agent 架構應該 LLM-agnostic —— 是 Q2 我提到的『供應商鎖定』痛點。Demo 用 Gemini 免費層驗證架構是可插拔的，production 只要改一個 config 就能換成 Claude。開發過程我全程用 Claude Code + Superpowers + Gstack + Agency-Agents，這才是核心 Claude 生態的展現。」
+
+---
+
+## 📈 Data & Cost Scale Story（Demo → Prod）
+
+**核心挑戰**：Demo 是 seed JSON，Prod 是真實電商流量。三個面向：
+
+### 資料量 scale
+| 面向 | Demo | Prod（單一 Plus 品牌） | Scale 策略 |
+|---|---|---|---|
+| 商品目錄 | 10 SKU JSON | 5k-50k SKU 從 Shopify API | Embedding search（向量檢索），LLM 只讀 top-k |
+| 對話 | 20-30 場 seed | 1000+/day per merchant | 分片 by date + Redis 快取 hot 對話 |
+| 訂單 | 30 筆 seed | 100-1000/day | Shopify webhook 增量同步 |
+| 評論 | 5-10/商品 | 100-10k/商品 | 只讀近 90 天 + rating≥4 高信號 |
+
+### Context window 限制
+- Gemini 3.6 Flash context = 1M tokens 但實測建議 <100k
+- 靠 **RAG 檢索** 塞相關資料，不全塞
+- Long conversation summary：舊訊息用 summary 替代
+
+### 成本 scale
+| 面向 | Demo | Prod（單 merchant） | 節省策略 |
+|---|---|---|---|
+| Tokens/month | <100k | 10M-100M | Multi-LLM routing（Haiku 分類、Sonnet 對話、Opus 深度分析） |
+| 成本/month | $0 | $50-500 | Prompt caching 命中省 90% |
+| Response latency | 1-3s | <500ms P95 | Cache 常見問題、streaming |
+
+### 面試講述金句
+> 「Demo 用 seed data 驗證產品邏輯正確，Prod 用同一 pipeline 換上真實資料來源。這個切換不改核心 agent，只改 data adapter 層 —— 這是 agent 架構最重要的分層。」
+
+---
+
+## 💰 Pricing Model（Draft — Day 6 refine）
+
+**用意**：面試官會問「你這產品要賣多少」。準備好 3-tier 定價 + benchmark。
+
+### 3 Tiers
+
+| Tier | 月費 | 對話量 | LLM 成本 | 毛利 | Features |
+|---|---|---|---|---|---|
+| **Starter** | $99/mo | 1000 | ~$5 | 95% | Lily-C only、單店 |
+| **Growth**（推薦） | $499/mo | 10,000 | ~$50 | 90% | + Lily-B、需求缺口、SLA、pinned widgets |
+| **Enterprise** | $2999+/mo | 無限 | 依用量 | 70-85% | + SSO / RBAC / audit log / Priority SLA / 客製 tone |
+
+### 定價邏輯
+- **Starter** 打「取代第一位客服人員」——一個客服月薪 30-40k NTD，$99/mo = 3k NTD/mo，明顯划算
+- **Growth** 打「內勤 BI 分析師取代」——資料分析師月薪 60-80k，Lily-B 從對話生洞察
+- **Enterprise** 打「Compliance + Scale」——SOC 2 / SSO / audit 是 enterprise 必備門檻
+
+### Benchmark（競品定價）
+- **Aria（PalUp）**：未公開，推估 $500-3000/mo
+- **Ada.cx**：$1500+/mo
+- **Yellow.ai**：$2500+/mo enterprise
+- **Intercom Fin AI**：$0.99/resolution（用量計費）
+
+Lily 的差異化 pricing：**「不是按 resolution 計費，而是按對話量 + tier 打包，讓 merchant 成本可預測」**
+
+### Cost/Revenue Estimation for LUNA 假想案例
+- LUNA 每月 5000 對話 → Growth tier $499/mo
+- 假設 25% conversion，$100 AoV → $125,000/mo 營收貢獻
+- **Lily ROI = 250x**（$125k revenue / $499 tool cost）
+- 這種數字面試官會直接哇

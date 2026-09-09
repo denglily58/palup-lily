@@ -1,0 +1,49 @@
+{
+  "returns": {
+    "window_days": 30,
+    "conditions_en": "Unopened or gently used (max 20% used). Include original packaging.",
+    "conditions_zh": "未拆封或輕度使用（20% 內），含原包裝。",
+    "process_en": [
+      "Fill out return form via email or Lily chat",
+      "Receive prepaid return label within 24 hours",
+      "Drop off at any USPS location",
+      "Refund issued to original payment within 5 business days"
+    ],
+    "process_zh": [
+      "透過 email 或 Lily 對話提交退貨申請",
+      "24 小時內收到預付退貨標籤",
+      "送到 USPS 網點寄回",
+      "5 個工作日內原路退款"
+    ],
+    "restock_fee": 0,
+    "return_shipping": "free"
+  },
+  "shipping": {
+    "cutoff_time_en": "Orders placed before 2pm PT ship same business day",
+    "cutoff_time_zh": "太平洋時間下午 2 點前下單，當日出貨（工作日）",
+    "carbon_neutral": true,
+    "packaging_en": "Fully recyclable, plastic-free packaging",
+    "packaging_zh": "完全可回收、無塑膠包裝"
+  },
+  "promotions": [
+    {"code": "WELCOME10", "name_en": "10% off first order", "name_zh": "首次購買 9 折", "conditions": "New customers only, minimum $50"},
+    {"code": "LUXEGIFT", "name_en": "Free deluxe sample on orders $150+", "name_zh": "滿 $150 送豪華試用組", "conditions": "One per customer, while supplies last"},
+    {"code": "LOYALTY20", "name_en": "20% off for Loyalty members after 3rd purchase", "name_zh": "會員第 4 單起 8 折", "conditions": "Auto-applied after 3 completed orders"}
+  ],
+  "loyalty_program": {
+    "name_en": "LUNA Circle",
+    "name_zh": "LUNA Circle 會員",
+    "tiers": [
+      {"tier": "Bronze", "spend_annual": 0, "benefits_en": "Free shipping over $60"},
+      {"tier": "Silver", "spend_annual": 300, "benefits_en": "Free shipping always + early access"},
+      {"tier": "Gold", "spend_annual": 800, "benefits_en": "All Silver + 20% off + free full-size gifts"}
+    ]
+  },
+  "brand_info": {
+    "founded": "2024",
+    "hq_en": "Los Angeles, CA",
+    "hq_zh": "洛杉磯，加州",
+    "values": ["Vegan", "Cruelty-free", "Inclusive", "Sustainable"],
+    "certifications": ["Leaping Bunny", "PETA Cruelty-Free", "Vegan Society"]
+  }
+}
