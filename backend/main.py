@@ -13,6 +13,8 @@ from pydantic import BaseModel
 
 from tools.catalog import full_context
 from tools.metrics import aggregate, log_chat
+from tools.orders import lookup_order_by_email, lookup_order_by_number
+from tools.returns import initiate_return
 from db.supabase_client import log_event, recent_events
 
 load_dotenv(Path(__file__).parent / ".env")
@@ -29,7 +31,7 @@ app.add_middleware(
 
 gemini = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 
-MODEL = "gemini-3.6-flash"
+MODEL = "gemini-3.5-flash-lite"  # Recommended by Google API; higher free tier than 3.6-flash
 
 # In-memory session store (demo only; production uses Supabase)
 _sessions: dict = {}
@@ -153,6 +155,13 @@ def chat(req: ChatRequest):
         response = gemini.models.generate_content(
             model=MODEL,
             contents=full_prompt,
+            config=types.GenerateContentConfig(
+                tools=[
+                    lookup_order_by_email,
+                    lookup_order_by_number,
+                    initiate_return,
+                ],
+            ),
         )
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"Gemini error: {exc}")
@@ -165,7 +174,14 @@ def chat(req: ChatRequest):
     from tools.metrics import estimate_cost
     cost = estimate_cost(input_tokens, output_tokens, MODEL)
 
+    # Robust text extraction — handles thought_signature parts and function call parts
     reply_text = response.text or ""
+    if not reply_text and response.candidates:
+        parts = response.candidates[0].content.parts if response.candidates[0].content else []
+        text_chunks = [p.text for p in parts if getattr(p, "text", None)]
+        reply_text = "".join(text_chunks).strip()
+    if not reply_text:
+        reply_text = "I got your request — let me follow up shortly."
 
     # Append this turn to session memory for future context
     append_to_session(req.session_id, "user", req.message)
