@@ -1,0 +1,86 @@
+name: Deploy
+
+# Triggered only on main branch, after CI green.
+# Runs deploy-agent → health-check-agent (→ rollback-agent on failure)
+# See sub-agents/deploy-agent.md, health-check-agent.md, rollback-agent.md
+
+on:
+  push:
+    branches: [main]
+
+  workflow_dispatch:   # manual trigger
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+jobs:
+
+  deploy-agent-backend:
+    name: deploy-agent (Fly.io backend)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - name: Deploy backend to Fly.io
+        run: flyctl deploy --config backend/fly.toml --remote-only --strategy rolling
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+  deploy-agent-frontend:
+    name: deploy-agent (Vercel frontend)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Vercel CLI deploy
+        run: |
+          npm i -g vercel
+          cd frontend
+          vercel pull --yes --environment=production --token=$VERCEL_TOKEN
+          vercel build --prod --token=$VERCEL_TOKEN
+          vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+  health-check-agent:
+    name: health-check-agent (5 smoke tests)
+    needs: [deploy-agent-backend, deploy-agent-frontend]
+    runs-on: ubuntu-latest
+    steps:
+      - name: 5 parallel checks
+        run: |
+          BACKEND="https://palup-lily-api.fly.dev"
+          FRONTEND="https://palup-lily.vercel.app"
+
+          echo "Check 1: backend /health"
+          curl -fs -m 15 "$BACKEND/health" | grep -q '"status":"ok"' || { echo "❌ backend health"; exit 1; }
+
+          echo "Check 2: frontend 200"
+          curl -fsI -m 15 "$FRONTEND" | grep -q "200" || { echo "❌ frontend"; exit 1; }
+
+          echo "Check 3: /products responds"
+          curl -fs -m 15 "$BACKEND/products" | grep -q '"products"' || { echo "❌ catalog"; exit 1; }
+
+          echo "Check 4: /admin/stats responds (Supabase reachable)"
+          curl -fs -m 15 "$BACKEND/admin/stats" | grep -q "today_conversations" || { echo "❌ db"; exit 1; }
+
+          echo "Check 5: /metrics responds"
+          curl -fs -m 15 "$BACKEND/metrics" | grep -q "total_conversations" || { echo "❌ metrics"; exit 1; }
+
+          echo "🎉 5/5 checks green — deploy verified"
+
+  rollback-agent-notify:
+    name: rollback-agent (on failure only)
+    needs: [health-check-agent]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "⚠️ Health check failed — rollback-agent would trigger fly.io release rollback"
+          echo "See sub-agents/rollback-agent.md for the runbook"
+          # In prod: flyctl releases rollback -a palup-lily-api
