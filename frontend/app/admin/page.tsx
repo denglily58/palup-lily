@@ -49,7 +49,7 @@ export default function AdminPage() {
 
   // Lily-B chat state
   const [lbMessages, setLbMessages] = useState<LilyBMsg[]>([
-    { role: "assistant", content: "Hi — I'm Lily-B, your business copilot. Ask me about buyer trends, demand gaps, sales, or the handoff queue." },
+    { role: "assistant", content: "Hi — I'm your Business Copilot. Ask about buyer trends, demand gaps, sales, or the handoff queue." },
   ]);
   const [lbInput, setLbInput] = useState("");
   const [lbLoading, setLbLoading] = useState(false);
@@ -181,7 +181,7 @@ export default function AdminPage() {
           </div>
           <div className="flex items-center gap-4">
             <button className="text-xs px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-              🟢 Lily is online
+              🟢 Copilot online
             </button>
             <div className="text-right">
               <div className="text-sm font-medium">{displayName}</div>
@@ -202,7 +202,7 @@ export default function AdminPage() {
         <div>
           <h1 className="text-2xl font-light">Good morning, {displayName.split(" ")[0]} ☀️</h1>
           <p className="text-sm text-neutral-500">
-            {stats?.today_conversations.count ?? 0} conversations today · Lily-B chat coming Day 4
+            {stats?.today_conversations.count ?? 0} conversations today · Business Copilot ready below
           </p>
         </div>
 
@@ -215,13 +215,13 @@ export default function AdminPage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Today's Conversations */}
-              <div className="bg-white rounded-xl shadow-sm hover:shadow-md p-5 transition">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="text-xs text-neutral-500">Today's Conversations</div>
+              <div className="bg-white rounded-xl shadow-sm hover:shadow-md p-6 transition">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="text-sm text-neutral-600 font-medium">Today's Conversations</div>
                   {stats.today_conversations.vs_yesterday_pct !== null && (
                     <span
                       className={
-                        "text-xs px-2 py-0.5 rounded-full " +
+                        "text-sm px-2.5 py-0.5 rounded-full " +
                         (stats.today_conversations.vs_yesterday_pct >= 0
                           ? "bg-emerald-50 text-emerald-700"
                           : "bg-red-50 text-red-700")
@@ -232,33 +232,33 @@ export default function AdminPage() {
                     </span>
                   )}
                 </div>
-                <div className="text-3xl font-light">{stats.today_conversations.count}</div>
-                <div className="text-xs text-neutral-500 mt-2">
+                <div className="text-4xl font-light">{stats.today_conversations.count}</div>
+                <div className="text-sm text-neutral-500 mt-3">
                   vs yesterday {stats.today_conversations.yesterday_count}
                 </div>
               </div>
 
               {/* Today's Conversions */}
-              <div className="bg-white rounded-xl shadow-sm hover:shadow-md p-5 transition">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="text-xs text-neutral-500">Today's Conversions</div>
+              <div className="bg-white rounded-xl shadow-sm hover:shadow-md p-6 transition">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="text-sm text-neutral-600 font-medium">Today's Conversions</div>
                   <span className="text-xs px-2 py-0.5 bg-purple-50 text-purple-700 rounded-full">
                     {stats.today_conversions.rate_pct}%
                   </span>
                 </div>
-                <div className="text-3xl font-light">
+                <div className="text-4xl font-light">
                   {stats.today_conversions.converted}
                   <span className="text-lg text-neutral-400">/{stats.today_conversions.total}</span>
                 </div>
-                <div className="text-xs text-neutral-500 mt-2">
+                <div className="text-sm text-neutral-500 mt-3">
                   Est. revenue ${stats.today_conversions.est_revenue_usd.toLocaleString()}
                 </div>
               </div>
 
               {/* Demand Gaps */}
-              <div className="bg-white rounded-xl shadow-sm hover:shadow-md p-5 transition">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="text-xs text-neutral-500">Demand Gaps Top 3</div>
+              <div className="bg-white rounded-xl shadow-sm hover:shadow-md p-6 transition">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="text-sm text-neutral-600 font-medium">Demand Gaps Top 3</div>
                   <span className="text-xs px-2 py-0.5 bg-amber-50 text-amber-700 rounded-full">
                     this week
                   </span>
@@ -266,7 +266,7 @@ export default function AdminPage() {
                 {stats.demand_gaps.length === 0 ? (
                   <div className="text-sm text-neutral-400 mt-2">No gaps logged yet.</div>
                 ) : (
-                  <ul className="text-xs space-y-1 mt-1">
+                  <ul className="text-sm space-y-2 mt-2">
                     {stats.demand_gaps.map((g, i) => (
                       <li key={i} className="flex justify-between gap-2">
                         <span className="truncate">{g.category || g.question}</span>
@@ -278,12 +278,12 @@ export default function AdminPage() {
               </div>
 
               {/* Human Handoffs */}
-              <div className="bg-white rounded-xl shadow-sm hover:shadow-md p-5 transition">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="text-xs text-neutral-500">Human Handoffs</div>
+              <div className="bg-white rounded-xl shadow-sm hover:shadow-md p-6 transition">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="text-sm text-neutral-600 font-medium">Human Handoffs</div>
                   <span
                     className={
-                      "text-xs px-2 py-0.5 rounded-full " +
+                      "text-sm px-2.5 py-0.5 rounded-full " +
                       (stats.red_alerts.high_urgency > 0
                         ? "bg-red-50 text-red-700"
                         : "bg-neutral-100 text-neutral-600")
@@ -292,19 +292,19 @@ export default function AdminPage() {
                     {stats.red_alerts.high_urgency > 0 ? "urgent" : "normal"}
                   </span>
                 </div>
-                <div className="text-3xl font-light">{stats.red_alerts.all_pending}</div>
-                <div className="text-xs text-neutral-500 mt-2">
+                <div className="text-4xl font-light">{stats.red_alerts.all_pending}</div>
+                <div className="text-sm text-neutral-500 mt-3">
                   {stats.red_alerts.high_urgency} high-urgency · returns auto
                 </div>
               </div>
 
               {/* SLA Compliance */}
-              <div className="bg-white rounded-xl shadow-sm hover:shadow-md p-5 transition">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="text-xs text-neutral-500">SLA Compliance</div>
+              <div className="bg-white rounded-xl shadow-sm hover:shadow-md p-6 transition">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="text-sm text-neutral-600 font-medium">SLA Compliance</div>
                   <span
                     className={
-                      "text-xs px-2 py-0.5 rounded-full " +
+                      "text-sm px-2.5 py-0.5 rounded-full " +
                       ((stats.sla_compliance.pct ?? 100) >= 90
                         ? "bg-emerald-50 text-emerald-700"
                         : (stats.sla_compliance.pct ?? 100) >= 75
@@ -315,7 +315,7 @@ export default function AdminPage() {
                     {stats.sla_compliance.pct !== null ? `${stats.sla_compliance.pct}%` : "—"}
                   </span>
                 </div>
-                <div className="text-3xl font-light">
+                <div className="text-4xl font-light">
                   {stats.sla_compliance.on_time}
                   <span className="text-lg text-neutral-400">/{stats.sla_compliance.total_resolved}</span>
                 </div>
@@ -326,14 +326,14 @@ export default function AdminPage() {
 
               {/* AI Usage */}
               {metrics && (
-                <div className="bg-white rounded-xl shadow-sm hover:shadow-md p-5 transition">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="text-xs text-neutral-500">🤖 AI Usage</div>
+                <div className="bg-white rounded-xl shadow-sm hover:shadow-md p-6 transition">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="text-sm text-neutral-600 font-medium">🤖 AI Usage</div>
                     <span className="text-xs px-2 py-0.5 bg-purple-50 text-purple-700 rounded-full">
                       this month
                     </span>
                   </div>
-                  <div className="text-3xl font-light">
+                  <div className="text-4xl font-light">
                     ${metrics.total_cost_usd.toFixed(3)}
                   </div>
                   <div className="text-xs text-neutral-500 mt-2">
@@ -349,8 +349,8 @@ export default function AdminPage() {
         <section className="bg-white rounded-2xl shadow-sm overflow-hidden">
           <div className="p-4 border-b border-neutral-100 flex items-center gap-2">
             <span className="text-lg">💬</span>
-            <span className="font-medium">Ask Lily-B</span>
-            <span className="text-xs text-neutral-500">— your business copilot</span>
+            <span className="font-medium">Ask Business Copilot</span>
+            <span className="text-xs text-neutral-500">— your merchant AI</span>
           </div>
           <div className="p-6 space-y-4 max-h-[400px] overflow-y-auto">
             {lbMessages.map((m, i) => (
@@ -378,7 +378,7 @@ export default function AdminPage() {
               <div className="flex gap-3 items-start">
                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-300 to-pink-300 flex-shrink-0" />
                 <div className="bg-neutral-50 rounded-2xl px-4 py-3 text-sm text-neutral-500">
-                  Lily-B is analyzing...
+                  Analyzing...
                 </div>
               </div>
             )}
