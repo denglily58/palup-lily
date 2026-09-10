@@ -1,0 +1,160 @@
+[
+  {
+    "id": "conv_2001",
+    "session_id": "sess_seed_001",
+    "actor": "buyer",
+    "lang": "en",
+    "user_email": "sarah.johnson@gmail.com",
+    "messages": [
+      {"role": "user", "content": "Hi, do you carry vegan products?", "at": "2026-09-01T14:30:00Z"},
+      {"role": "assistant", "content": "Yes! All LUNA Beauty products are 100% vegan and cruelty-free — we're certified by Leaping Bunny and PETA. Anything specific you're looking for?", "at": "2026-09-01T14:30:03Z"}
+    ],
+    "intent": "brand_values_query",
+    "status": "answered",
+    "converted": true,
+    "conversion_order_id": "ord_1030",
+    "created_at": "2026-09-01T14:30:00Z"
+  },
+  {
+    "id": "conv_2002",
+    "session_id": "sess_seed_002",
+    "actor": "buyer",
+    "lang": "en",
+    "user_email": "guest_visitor",
+    "messages": [
+      {"role": "user", "content": "I have sensitive skin — is your foundation OK for me?", "at": "2026-09-02T10:15:00Z"},
+      {"role": "assistant", "content": "Soft-Glow Foundation is formulated without common irritants — fragrance-free, dermatologist-tested. It contains hyaluronic acid and squalane which are gentle. 87% of reviewers with sensitive skin rate it 5 stars. Would you like a shade recommendation?", "at": "2026-09-02T10:15:04Z"}
+    ],
+    "intent": "sensitive_skin_query",
+    "status": "answered_low_confidence",
+    "converted": false,
+    "created_at": "2026-09-02T10:15:00Z"
+  },
+  {
+    "id": "conv_2003",
+    "session_id": "sess_seed_003",
+    "actor": "buyer",
+    "lang": "en",
+    "user_email": "guest_visitor",
+    "messages": [
+      {"role": "user", "content": "Do you have a mineral SPF sunscreen?", "at": "2026-09-02T16:20:00Z"},
+      {"role": "assistant", "content": "We don't carry standalone sunscreen at the moment. Our Radiant Cushion has SPF 30+++ built-in if you'd like coverage plus sun protection. I'll pass along your sunscreen request to our team!", "at": "2026-09-02T16:20:05Z"}
+    ],
+    "intent": "product_not_found",
+    "status": "unable_to_answer",
+    "converted": false,
+    "demand_gap_logged": "mineral_sunscreen",
+    "created_at": "2026-09-02T16:20:00Z"
+  },
+  {
+    "id": "conv_2004",
+    "session_id": "sess_seed_004",
+    "actor": "buyer",
+    "lang": "en",
+    "user_email": "aria.chen@gmail.com",
+    "messages": [
+      {"role": "user", "content": "Where is my order LUNA-1019?", "at": "2026-09-03T09:05:00Z"},
+      {"role": "assistant", "content": "Your order LUNA-1019 (Nude Rose Lipstick #03) was delivered on Aug 11. If you'd like to reorder, I can help you check out fast — same shade or something new?", "at": "2026-09-03T09:05:03Z"}
+    ],
+    "intent": "order_lookup",
+    "status": "answered",
+    "converted": false,
+    "created_at": "2026-09-03T09:05:00Z"
+  },
+  {
+    "id": "conv_2005",
+    "session_id": "sess_seed_005",
+    "actor": "buyer",
+    "lang": "en",
+    "user_email": "guest_visitor",
+    "messages": [
+      {"role": "user", "content": "I want to speak to a human agent please", "at": "2026-09-03T11:40:00Z"},
+      {"role": "assistant", "content": "Sure — connecting you to our team now. We'll respond within 4 business hours (Mon-Fri 9am-6pm PT). Anything urgent I can note for them?", "at": "2026-09-03T11:40:03Z"}
+    ],
+    "intent": "handoff_request",
+    "status": "handoff_to_human",
+    "converted": false,
+    "handoff_id": "handoff_101",
+    "created_at": "2026-09-03T11:40:00Z"
+  },
+  {
+    "id": "conv_2006",
+    "session_id": "sess_seed_006",
+    "actor": "buyer",
+    "lang": "zh",
+    "user_email": "guest_visitor",
+    "messages": [
+      {"role": "user", "content": "你有亞洲膚色專用眉筆嗎？", "at": "2026-09-04T13:10:00Z"},
+      {"role": "assistant", "content": "我們的 Fine-Line 眉筆有 3 個色號：亞麻棕（冷調）、深棕（暖調）、黑棕（冷調），適合各種亞洲膚色。「亞麻棕」在偏黃調亞洲肌買家中最受歡迎（38 則 5 星）。要看看嗎？", "at": "2026-09-04T13:10:04Z"}
+    ],
+    "intent": "product_recommendation",
+    "status": "answered",
+    "converted": true,
+    "conversion_order_id": "ord_1012",
+    "created_at": "2026-09-04T13:10:00Z"
+  },
+  {
+    "id": "conv_2007",
+    "session_id": "sess_seed_007",
+    "actor": "buyer",
+    "lang": "en",
+    "user_email": "test@example.com",
+    "messages": [
+      {"role": "user", "content": "I want to return my Nude Rose lipstick, it doesn't work with my skin tone", "at": "2026-09-05T14:00:00Z"},
+      {"role": "assistant", "content": "No problem! I've started a return for order LUNA-1006 (Nude Rose #05 x2). You'll get a prepaid label via email in 24 hours — free return shipping. Refund of $1,780 will hit your card within 5 business days. Return ID: R-5001.", "at": "2026-09-05T14:00:05Z"}
+    ],
+    "intent": "return_initiation",
+    "status": "answered",
+    "converted": false,
+    "return_id": "R-5001",
+    "created_at": "2026-09-05T14:00:00Z"
+  },
+  {
+    "id": "conv_2008",
+    "session_id": "sess_seed_008",
+    "actor": "buyer",
+    "lang": "en",
+    "user_email": "guest_visitor",
+    "messages": [
+      {"role": "user", "content": "How long does shipping take to California?", "at": "2026-09-06T08:30:00Z"},
+      {"role": "assistant", "content": "California ships in 2 business days via standard shipping ($6). Free over $60. Need it faster? Expedited (2-day) is +$15.", "at": "2026-09-06T08:30:02Z"}
+    ],
+    "intent": "shipping_query",
+    "status": "answered",
+    "converted": false,
+    "created_at": "2026-09-06T08:30:00Z"
+  },
+  {
+    "id": "conv_2009",
+    "session_id": "sess_seed_009",
+    "actor": "buyer",
+    "lang": "en",
+    "user_email": "guest_visitor",
+    "messages": [
+      {"role": "user", "content": "I'm looking for a lipstick for a warm-toned yellow undertone Asian skin. Daily wear.", "at": "2026-09-06T15:45:00Z"},
+      {"role": "assistant", "content": "For yellow-undertone Asian skin daily wear, I'd recommend Nude Rose Lipstick — 3 shades work beautifully: #03 Nude Rose (top pick, 24 reviews say versatile), #04 Maple Syrup (warmer), #06 Cocoa Kiss (deeper). Want swatches?", "at": "2026-09-06T15:45:04Z"}
+    ],
+    "intent": "product_recommendation",
+    "status": "answered",
+    "converted": true,
+    "conversion_order_id": "ord_1023",
+    "created_at": "2026-09-06T15:45:00Z"
+  },
+  {
+    "id": "conv_2010",
+    "session_id": "sess_seed_010",
+    "actor": "buyer",
+    "lang": "en",
+    "user_email": "guest_visitor",
+    "messages": [
+      {"role": "user", "content": "This is ridiculous, I got the wrong item AGAIN", "at": "2026-09-07T20:00:00Z"},
+      {"role": "assistant", "content": "I'm really sorry — that's frustrating. I'm connecting you to a specialist right now to fix this. Can you share the order number so I can flag it as urgent?", "at": "2026-09-07T20:00:03Z"}
+    ],
+    "intent": "complaint_escalation",
+    "status": "handoff_to_human",
+    "converted": false,
+    "handoff_id": "handoff_102",
+    "urgency": "high",
+    "created_at": "2026-09-07T20:00:00Z"
+  }
+]

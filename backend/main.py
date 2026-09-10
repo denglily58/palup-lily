@@ -32,7 +32,11 @@ app = FastAPI(title="LUNA × Lily Backend", version="0.1.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=[
+        "http://localhost:3000",
+        "https://palup-lily.vercel.app",
+    ],
+    allow_origin_regex=r"https://palup-lily-.*\.vercel\.app",   # preview deploys
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

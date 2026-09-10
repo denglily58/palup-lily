@@ -3,3 +3,4 @@ uvicorn[standard]>=0.39.0
 google-genai>=1.47.0
 python-dotenv>=1.2.0
 slowapi>=0.1.10
+supabase>=2.31.0

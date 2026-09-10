@@ -1,0 +1,206 @@
+[
+  {
+    "id": "prod_001",
+    "sku": "LUNA-LIP-01",
+    "name_zh": "Nude Rose 絲絨唇膏",
+    "name_en": "Nude Rose Velvet Lipstick",
+    "category": "lip",
+    "subcategory": "lipstick",
+    "price": 890,
+    "cost": 245,
+    "shades": [
+      {"code": "01", "name_zh": "珊瑚粉", "name_en": "Coral Bloom", "hex": "#E97462", "undertone": "warm", "stock": 50},
+      {"code": "02", "name_zh": "玫瑰豆沙", "name_en": "Rose Cocoa", "hex": "#B36A6C", "undertone": "cool", "stock": 42},
+      {"code": "03", "name_zh": "裸粉", "name_en": "Nude Rose", "hex": "#C88B8A", "undertone": "yellow", "stock": 32},
+      {"code": "04", "name_zh": "楓糖", "name_en": "Maple Syrup", "hex": "#A66246", "undertone": "warm", "stock": 27},
+      {"code": "05", "name_zh": "櫻花霧", "name_en": "Sakura Mist", "hex": "#DA9BA0", "undertone": "cool", "stock": 38},
+      {"code": "06", "name_zh": "可可豆沙", "name_en": "Cocoa Kiss", "hex": "#8B5A4C", "undertone": "warm", "stock": 18}
+    ],
+    "description_zh": "絲絨霧感一次上色，不厚重、不拔乾，含玻尿酸與蜂蠟。純素配方、無動物實驗。",
+    "description_en": "Velvet matte finish in one swipe. Weightless, non-drying. Formulated with hyaluronic acid and beeswax. Vegan, cruelty-free.",
+    "tags": ["vegan", "cruelty-free", "hero", "matte"],
+    "image_url": "/images/products/nude-rose.png",
+    "created_at": "2026-04-15"
+  },
+  {
+    "id": "prod_002",
+    "sku": "LUNA-CHK-01",
+    "name_zh": "Petal 花瓣頰彩",
+    "name_en": "Petal Blush",
+    "category": "cheek",
+    "subcategory": "blush",
+    "price": 780,
+    "cost": 210,
+    "shades": [
+      {"code": "01", "name_zh": "蜜桃紅", "name_en": "Peach Glow", "hex": "#F3A392", "undertone": "warm", "stock": 45},
+      {"code": "02", "name_zh": "櫻粉", "name_en": "Cherry Petal", "hex": "#E48B94", "undertone": "cool", "stock": 33},
+      {"code": "03", "name_zh": "杏桃奶茶", "name_en": "Apricot Tea", "hex": "#D28E77", "undertone": "yellow", "stock": 29},
+      {"code": "04", "name_zh": "玫瑰木", "name_en": "Rosewood", "hex": "#B87878", "undertone": "cool", "stock": 22}
+    ],
+    "description_zh": "礦物粉體、附貂毛刷。輕拍即顯氣色，可疊擦。",
+    "description_en": "Mineral powder with mink brush. Buildable, radiant flush.",
+    "tags": ["vegan", "cruelty-free", "mineral"],
+    "image_url": "/images/products/petal-blush.png",
+    "created_at": "2026-05-01"
+  },
+  {
+    "id": "prod_003",
+    "sku": "LUNA-EYE-01",
+    "name_zh": "Nocturne 9 色眼影盤（中性色）",
+    "name_en": "Nocturne 9-Shade Palette (Neutral)",
+    "category": "eye",
+    "subcategory": "palette",
+    "price": 1680,
+    "cost": 480,
+    "shades": [
+      {"code": "N01", "name_zh": "中性 9 色", "name_en": "Neutral 9-Shade", "hex": "#8B7355", "undertone": "neutral", "stock": 38}
+    ],
+    "description_zh": "9 色配比：3 霧面基底、3 珠光、3 亮片。含冷/暖過渡色，可畫日常到派對妝。",
+    "description_en": "9 shades: 3 matte bases, 3 shimmers, 3 glitters. Warm-cool balanced palette for day-to-night looks.",
+    "tags": ["vegan", "cruelty-free", "palette"],
+    "image_url": "/images/products/nocturne-palette.png",
+    "created_at": "2026-03-20"
+  },
+  {
+    "id": "prod_004",
+    "sku": "LUNA-EYE-02",
+    "name_zh": "Earthly 9 色眼影盤（大地色）",
+    "name_en": "Earthly 9-Shade Palette (Warm)",
+    "category": "eye",
+    "subcategory": "palette",
+    "price": 1680,
+    "cost": 480,
+    "shades": [
+      {"code": "E01", "name_zh": "大地 9 色", "name_en": "Earthly 9-Shade", "hex": "#6B4423", "undertone": "warm", "stock": 27}
+    ],
+    "description_zh": "9 色暖色系配比：焦糖、赤陶、可可、玫瑰金。適合亞洲膚色。",
+    "description_en": "Warm-toned 9 shades: caramel, terracotta, cocoa, rose gold. Flattering on Asian skin tones.",
+    "tags": ["vegan", "cruelty-free", "palette", "warm"],
+    "image_url": "/images/products/earthly-palette.png",
+    "created_at": "2026-06-10"
+  },
+  {
+    "id": "prod_005",
+    "sku": "LUNA-BRW-01",
+    "name_zh": "Fine-Line 極細眉筆",
+    "name_en": "Fine-Line Brow Pen",
+    "category": "eye",
+    "subcategory": "brow",
+    "price": 620,
+    "cost": 165,
+    "shades": [
+      {"code": "01", "name_zh": "亞麻棕", "name_en": "Linen Brown", "hex": "#7B5C3D", "undertone": "cool", "stock": 55},
+      {"code": "02", "name_zh": "深棕", "name_en": "Deep Brown", "hex": "#4B2E1A", "undertone": "warm", "stock": 41},
+      {"code": "03", "name_zh": "黑棕", "name_en": "Black Brown", "hex": "#2A1C10", "undertone": "cool", "stock": 33}
+    ],
+    "description_zh": "0.1mm 極細筆頭，防水防汗，可畫毛流感眉。",
+    "description_en": "0.1mm ultra-fine tip. Waterproof, smudge-proof. Hair-stroke definition.",
+    "tags": ["vegan", "cruelty-free", "waterproof"],
+    "image_url": "/images/products/brow-pen.png",
+    "created_at": "2026-02-05"
+  },
+  {
+    "id": "prod_006",
+    "sku": "LUNA-MSC-01",
+    "name_zh": "Volumizing 豐盈睫毛膏",
+    "name_en": "Volumizing Mascara",
+    "category": "eye",
+    "subcategory": "mascara",
+    "price": 780,
+    "cost": 195,
+    "shades": [
+      {"code": "01", "name_zh": "極黑", "name_en": "Ink Black", "hex": "#000000", "undertone": "neutral", "stock": 60}
+    ],
+    "description_zh": "特殊刷頭：粗+細雙面。防暈染防水，卸妝溫水可卸。",
+    "description_en": "Dual-sided brush for volume + separation. Waterproof yet warm-water removable.",
+    "tags": ["vegan", "cruelty-free", "waterproof"],
+    "image_url": "/images/products/mascara.png",
+    "created_at": "2026-01-20"
+  },
+  {
+    "id": "prod_007",
+    "sku": "LUNA-BSE-01",
+    "name_zh": "Soft-Glow 光澤粉底液",
+    "name_en": "Soft-Glow Foundation",
+    "category": "base",
+    "subcategory": "foundation",
+    "price": 1480,
+    "cost": 395,
+    "shades": [
+      {"code": "N10", "name_zh": "N10 極淺", "name_en": "N10 Fair", "hex": "#F5DEC7", "undertone": "neutral", "stock": 18},
+      {"code": "N15", "name_zh": "N15 淺", "name_en": "N15 Light", "hex": "#EACBAA", "undertone": "neutral", "stock": 26},
+      {"code": "Y20", "name_zh": "Y20 淺黃", "name_en": "Y20 Light Yellow", "hex": "#E2B98F", "undertone": "yellow", "stock": 42},
+      {"code": "Y25", "name_zh": "Y25 中黃", "name_en": "Y25 Medium Yellow", "hex": "#D3A377", "undertone": "yellow", "stock": 38},
+      {"code": "W25", "name_zh": "W25 中暖", "name_en": "W25 Medium Warm", "hex": "#C99269", "undertone": "warm", "stock": 24},
+      {"code": "W30", "name_zh": "W30 深暖", "name_en": "W30 Deep Warm", "hex": "#A87848", "undertone": "warm", "stock": 12},
+      {"code": "C25", "name_zh": "C25 中冷", "name_en": "C25 Medium Cool", "hex": "#C69987", "undertone": "cool", "stock": 15},
+      {"code": "C30", "name_zh": "C30 深冷", "name_en": "C30 Deep Cool", "hex": "#9C7660", "undertone": "cool", "stock": 8}
+    ],
+    "description_zh": "中至高遮瑕、光澤妝感、8 小時不脫妝。含玻尿酸與角鯊烷。",
+    "description_en": "Medium-to-full coverage, luminous finish, 8-hour wear. Formulated with hyaluronic acid and squalane.",
+    "tags": ["vegan", "cruelty-free", "hero", "hydrating"],
+    "image_url": "/images/products/foundation.png",
+    "created_at": "2026-04-01"
+  },
+  {
+    "id": "prod_008",
+    "sku": "LUNA-BSE-02",
+    "name_zh": "Radiant 氣墊粉餅",
+    "name_en": "Radiant Cushion",
+    "category": "base",
+    "subcategory": "cushion",
+    "price": 1280,
+    "cost": 340,
+    "shades": [
+      {"code": "N15", "name_zh": "N15 淺", "name_en": "N15 Light", "hex": "#EACBAA", "undertone": "neutral", "stock": 28},
+      {"code": "Y20", "name_zh": "Y20 淺黃", "name_en": "Y20 Light Yellow", "hex": "#E2B98F", "undertone": "yellow", "stock": 45},
+      {"code": "Y25", "name_zh": "Y25 中黃", "name_en": "Y25 Medium Yellow", "hex": "#D3A377", "undertone": "yellow", "stock": 33},
+      {"code": "W25", "name_zh": "W25 中暖", "name_en": "W25 Medium Warm", "hex": "#C99269", "undertone": "warm", "stock": 19}
+    ],
+    "description_zh": "水潤氣墊、SPF 30+++，補妝方便。附替換蕊。",
+    "description_en": "Dewy cushion with SPF 30+++. Refillable.",
+    "tags": ["vegan", "cruelty-free", "SPF"],
+    "image_url": "/images/products/cushion.png",
+    "created_at": "2026-05-15"
+  },
+  {
+    "id": "prod_009",
+    "sku": "LUNA-CON-01",
+    "name_zh": "Silky 絲滑遮瑕",
+    "name_en": "Silky Concealer",
+    "category": "base",
+    "subcategory": "concealer",
+    "price": 820,
+    "cost": 220,
+    "shades": [
+      {"code": "01", "name_zh": "極淺", "name_en": "Fair", "hex": "#F0D5B8", "undertone": "neutral", "stock": 22},
+      {"code": "02", "name_zh": "淺", "name_en": "Light", "hex": "#E4C4A0", "undertone": "yellow", "stock": 34},
+      {"code": "03", "name_zh": "自然", "name_en": "Natural", "hex": "#D3AB84", "undertone": "yellow", "stock": 41},
+      {"code": "04", "name_zh": "小麥", "name_en": "Tan", "hex": "#B98E68", "undertone": "warm", "stock": 20},
+      {"code": "05", "name_zh": "深褐", "name_en": "Deep", "hex": "#8E6749", "undertone": "warm", "stock": 8}
+    ],
+    "description_zh": "高遮瑕、絲滑膚感、可遮黑眼圈與痘印。",
+    "description_en": "Full-coverage, silky feel. Covers dark circles and blemishes.",
+    "tags": ["vegan", "cruelty-free"],
+    "image_url": "/images/products/concealer.png",
+    "created_at": "2026-03-01"
+  },
+  {
+    "id": "prod_010",
+    "sku": "LUNA-SET-01",
+    "name_zh": "Luna Icons 明星禮盒",
+    "name_en": "Luna Icons Discovery Set",
+    "category": "gift",
+    "subcategory": "set",
+    "price": 2880,
+    "cost": 780,
+    "shades": [
+      {"code": "SET", "name_zh": "禮盒版", "name_en": "Discovery Set", "hex": "#EBE6DC", "undertone": "neutral", "stock": 15}
+    ],
+    "description_zh": "包含 Nude Rose 唇膏 #03、Petal 頰彩 #01、Nocturne 眼影盤、精緻包裝。適合送禮。原價 $3,350，禮盒價 $2,880。",
+    "description_en": "Includes Nude Rose Lipstick #03, Petal Blush #01, Nocturne Palette. Premium gift packaging. Save 14%.",
+    "tags": ["vegan", "cruelty-free", "gift", "bundle"],
+    "image_url": "/images/products/gift-set.png",
+    "created_at": "2026-07-01"
+  }
+]

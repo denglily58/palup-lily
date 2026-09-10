@@ -6,7 +6,9 @@ from typing import Optional
 
 from db.supabase_client import get_supabase
 
-SEED_DIR = Path(__file__).parent.parent.parent / "seed"
+_backend_seed = Path(__file__).parent.parent / "seed"
+_project_seed = Path(__file__).parent.parent.parent / "seed"
+SEED_DIR = _backend_seed if _backend_seed.exists() else _project_seed
 
 
 def query_recent_chats(hours: int = 24, keyword_filter: Optional[str] = None) -> str:

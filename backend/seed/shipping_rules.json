@@ -1,0 +1,27 @@
+{
+  "currency": "USD",
+  "free_shipping_over": 60,
+  "zones": [
+    {"zone": "us_ca", "name_en": "California", "name_zh": "加州", "eta_days": 2, "fee": 6},
+    {"zone": "us_ny", "name_en": "New York", "name_zh": "紐約州", "eta_days": 3, "fee": 6},
+    {"zone": "us_tx", "name_en": "Texas", "name_zh": "德州", "eta_days": 3, "fee": 6},
+    {"zone": "us_wa", "name_en": "Washington", "name_zh": "華盛頓州", "eta_days": 3, "fee": 6},
+    {"zone": "us_fl", "name_en": "Florida", "name_zh": "佛州", "eta_days": 4, "fee": 6},
+    {"zone": "us_il", "name_en": "Illinois", "name_zh": "伊利諾州", "eta_days": 3, "fee": 6},
+    {"zone": "us_ma", "name_en": "Massachusetts", "name_zh": "麻州", "eta_days": 3, "fee": 6},
+    {"zone": "us_ga", "name_en": "Georgia", "name_zh": "喬治亞州", "eta_days": 4, "fee": 6},
+    {"zone": "us_other", "name_en": "Other US States", "name_zh": "美國其他州", "eta_days": 5, "fee": 8},
+    {"zone": "canada", "name_en": "Canada", "name_zh": "加拿大", "eta_days": 7, "fee": 15},
+    {"zone": "international", "name_en": "International", "name_zh": "國際", "eta_days": 14, "fee": 30}
+  ],
+  "methods": [
+    {"code": "standard", "name_en": "Standard Shipping", "name_zh": "標準寄送", "extra_days": 0},
+    {"code": "expedited", "name_en": "Expedited (2-Day)", "name_zh": "快捷（2 日）", "extra_fee": 15, "extra_days": -2},
+    {"code": "overnight", "name_en": "Overnight", "name_zh": "隔日到", "extra_fee": 35, "extra_days": -3}
+  ],
+  "notes": {
+    "cutoff_time_en": "Orders placed before 2pm PT ship same day",
+    "cutoff_time_zh": "太平洋時間下午 2 點前下單當日出貨",
+    "carbon_neutral": true
+  }
+}

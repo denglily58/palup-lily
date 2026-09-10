@@ -7,7 +7,9 @@ import json
 from pathlib import Path
 from functools import lru_cache
 
-SEED_DIR = Path(__file__).parent.parent.parent / "seed"
+_backend_seed = Path(__file__).parent.parent / "seed"
+_project_seed = Path(__file__).parent.parent.parent / "seed"
+SEED_DIR = _backend_seed if _backend_seed.exists() else _project_seed
 
 
 @lru_cache(maxsize=1)
