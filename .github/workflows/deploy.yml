@@ -6,7 +6,7 @@ name: Deploy
 
 on:
   push:
-    branches: [main]
+    branches: [main]   # dormant on master until FLY/VERCEL secrets are set in GH → then flip to [master, main]
 
   workflow_dispatch:   # manual trigger
 
