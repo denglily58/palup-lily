@@ -20,8 +20,8 @@ jobs:
     name: deploy-agent (Fly.io backend)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - uses: actions/checkout@v7
+      - uses: superfly/flyctl-actions/setup-flyctl@v1.5
       - name: Deploy backend to Fly.io
         run: cd backend && flyctl deploy --remote-only --strategy rolling
         env:
