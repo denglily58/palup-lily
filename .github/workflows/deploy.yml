@@ -27,30 +27,13 @@ jobs:
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
-  deploy-agent-frontend:
-    name: deploy-agent (Vercel frontend)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - name: Vercel CLI deploy
-        run: |
-          npm i -g vercel
-          cd frontend
-          rm -rf .vercel   # let env vars (VERCEL_ORG_ID/VERCEL_PROJECT_ID) drive project linking
-          vercel pull --yes --environment=production --token=$VERCEL_TOKEN
-          vercel build --prod --token=$VERCEL_TOKEN
-          vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  # Frontend deploy is handled by Vercel's native Git integration —
+  # every push to master auto-deploys via github.com/apps/vercel webhook,
+  # visible on the Vercel dashboard. Different tool for different need.
 
   health-check-agent:
     name: health-check-agent (5 smoke tests)
-    needs: [deploy-agent-backend, deploy-agent-frontend]
+    needs: [deploy-agent-backend]
     runs-on: ubuntu-latest
     steps:
       - name: 5 parallel checks
