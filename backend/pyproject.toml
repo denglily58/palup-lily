@@ -1,0 +1,19 @@
+[tool.ruff]
+target-version = "py39"      # backend runs on Python 3.9 (local venv + Fly Docker) — stops UP045 nagging about `str | None` syntax
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "BLE", "S"]
+ignore = [
+  "E501",   # line too long — case-by-case
+  "S110",   # try-except-pass — used intentionally in logging paths
+]
+
+[tool.ruff.lint.per-file-ignores]
+# tool functions deliberately swallow exceptions so logging failures never break user flow
+"tools/*.py"              = ["BLE001"]
+"db/supabase_client.py"   = ["BLE001"]
+# FastAPI top-level handlers use blind except to convert any error into HTTP 500
+"main.py"                 = ["BLE001"]
+# seed scripts run once locally; different rules apply (env must load before db import)
+"scripts/*.py"            = ["BLE001", "E402", "F841"]

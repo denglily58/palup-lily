@@ -4,8 +4,8 @@ Simple v0 approach: inject full catalog + top reviews into system prompt.
 Later can upgrade to embedding-based retrieval when catalog >100 SKU.
 """
 import json
-from pathlib import Path
 from functools import lru_cache
+from pathlib import Path
 
 _backend_seed = Path(__file__).parent.parent / "seed"
 _project_seed = Path(__file__).parent.parent.parent / "seed"

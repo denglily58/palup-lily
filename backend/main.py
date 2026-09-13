@@ -11,20 +11,20 @@ from google import genai
 from google.genai import types
 from pydantic import BaseModel
 
-from tools.catalog import full_context
-from tools.metrics import aggregate, log_chat
-from tools.orders import lookup_order_by_email, lookup_order_by_number
-from tools.returns import initiate_return
-from tools.handoff import request_human_agent, log_demand_gap
+from agents.loader import get_prompt
+from db.supabase_client import log_event, recent_events
 from tools.analytics import dashboard_stats
+from tools.catalog import full_context
+from tools.handoff import log_demand_gap, request_human_agent
 from tools.lily_b_tools import (
-    query_recent_chats,
     get_demand_gaps,
     get_handoff_queue,
     get_sales_summary,
+    query_recent_chats,
 )
-from db.supabase_client import log_event, recent_events
-from agents.loader import get_prompt
+from tools.metrics import aggregate, log_chat
+from tools.orders import lookup_order_by_email, lookup_order_by_number
+from tools.returns import initiate_return
 
 load_dotenv(Path(__file__).parent / ".env")
 

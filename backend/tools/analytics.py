@@ -1,5 +1,6 @@
 """Analytics tool — reads Supabase tables and returns B端 dashboard stats."""
 from datetime import datetime, timedelta, timezone
+
 from db.supabase_client import get_supabase
 
 
@@ -40,11 +41,6 @@ def dashboard_stats() -> dict:
 
     # Widget 2: today's conversion proxy — returns + handoffs are proxies for engagement
     # For demo, use count of handoff_inbox created today as a conversion signal
-    today_handoffs = sb.table("handoff_inbox").select("id", count="exact").gte(
-        "created_at", today
-    ).execute()
-    today_handoff_count = today_handoffs.count or 0
-
     # For simplicity, "conversion" here = chat_query resulting in a return/handoff/product recommendation
     # We'll estimate as: 25% of today's chats "converted"
     est_conversions = round(today_chat_count * 0.25)

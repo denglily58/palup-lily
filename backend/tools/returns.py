@@ -1,6 +1,7 @@
 """Return initiation tool — Lily-C can start a return that writes to handoff_inbox."""
 import uuid
 from typing import Optional
+
 from db.supabase_client import get_supabase
 
 

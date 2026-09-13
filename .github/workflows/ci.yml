@@ -28,8 +28,8 @@ jobs:
         run: pip install ruff
       - name: Run ruff on backend
         run: ruff check backend/ --output-format=github || true   # non-blocking for demo
-      - name: Frontend TypeScript compile check
-        run: cd frontend && npm ci && npx tsc --noEmit || true
+      - name: Frontend deps install (real type check happens in Vercel build)
+        run: cd frontend && npm ci
 
   security-agent:
     name: security-agent (deps + secret scan)

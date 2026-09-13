@@ -5,13 +5,13 @@ Runs after Supabase tables exist. Idempotent-ish (won't clean prior test data).
 Run: cd backend && source venv/bin/activate && python scripts/seed_handoffs.py
 """
 import sys
-import uuid
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from dotenv import load_dotenv
+
 load_dotenv(Path(__file__).parent.parent / ".env")
 
 from db.supabase_client import get_supabase
