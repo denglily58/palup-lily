@@ -30,8 +30,7 @@ def log_event(
             "metadata": metadata or {},
         }
         get_supabase().table("event_logs").insert(row).execute()
-    except Exception as exc:
-        # Log but never break the user flow
+    except Exception as exc:  # noqa: BLE001 — intentional: log failures must not break user flow
         print(f"[event_log] Failed to write: {exc}")
 
 
