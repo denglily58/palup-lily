@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Deploy backend to Fly.io
-        run: flyctl deploy --config backend/fly.toml --remote-only --strategy rolling
+        run: cd backend && flyctl deploy --remote-only --strategy rolling
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
@@ -39,6 +39,7 @@ jobs:
         run: |
           npm i -g vercel
           cd frontend
+          rm -rf .vercel   # let env vars (VERCEL_ORG_ID/VERCEL_PROJECT_ID) drive project linking
           vercel pull --yes --environment=production --token=$VERCEL_TOKEN
           vercel build --prod --token=$VERCEL_TOKEN
           vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
