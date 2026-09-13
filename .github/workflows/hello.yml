@@ -1,0 +1,16 @@
+name: Hello  # smoke-test workflow — proves GitHub Actions itself is alive
+              # (no checkout, no actions, no external deps — pure GH runtime)
+
+on:
+  push:
+    branches: [master, main]
+  workflow_dispatch:   # can also fire manually from Actions UI
+
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "👋 Hello World from GitHub Actions"
+          echo "runner: $RUNNER_OS $(uname -a)"
+          echo "if you see this, GH Actions is working"
